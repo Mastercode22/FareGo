@@ -162,6 +162,8 @@ string onboard_title_3
 string perm_location_rationale
 style BottomSheetShapeAppearance
 style BottomSheetStyle
+style FareGoDialogButton
+style FareGoDialogTheme
 style ShapeAppearance.FareGo.BottomSheet
 style Theme.FareGo
 style Theme.FareGo.Splash

@@ -34,5 +34,15 @@
         <item name="cornerSizeTopLeft">24dp</item>
         <item name="cornerSizeTopRight">24dp</item>
     </style>
+    <!-- Add this style inside your existing <resources> block in res/values/themes.xml -->
 
+    <style name="FareGoDialogTheme" parent="Theme.MaterialComponents.Dialog.Alert">
+        <item name="colorSurface">@color/surface_dark</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="buttonBarPositiveButtonStyle">@style/FareGoDialogButton</item>
+    </style>
+
+    <style name="FareGoDialogButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/yellow_accent</item>
+    </style>
 </resources>

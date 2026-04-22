@@ -4925,6 +4925,8 @@ int style BottomSheetStyle 0x7f130120
 int style CardView 0x7f130121
 int style CardView_Dark 0x7f130122
 int style CardView_Light 0x7f130123
+int style FareGoDialogButton 0x7f130466
+int style FareGoDialogTheme 0x7f130467
 int style MaterialAlertDialog_Material3 0x7f130124
 int style MaterialAlertDialog_Material3_Animation 0x7f130125
 int style MaterialAlertDialog_Material3_Body_Text 0x7f130126

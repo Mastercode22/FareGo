@@ -36,10 +36,6 @@
         "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\ic_history.xml"
     },
     {
-        "merged": "com.farego.app-merged_res-43:/drawable_ic_avatar_placeholder.xml.flat",
-        "source": "com.farego.app-main-45:/drawable/ic_avatar_placeholder.xml"
-    },
-    {
         "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_bg_icon_button.xml.flat",
         "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\bg_icon_button.xml"
     },
@@ -50,6 +46,10 @@
     {
         "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\mipmap-xhdpi_ic_launcher_round.png.flat",
         "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\mipmap-xhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_ic_avatar_placeholder.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\ic_avatar_placeholder.xml"
     },
     {
         "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\mipmap-xxhdpi_ic_launcher_round.png.flat",
@@ -152,10 +152,6 @@
         "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\mipmap-xxhdpi\\ic_launcher.png"
     },
     {
-        "merged": "com.farego.app-merged_res-43:/layout_activity_profile.xml.flat",
-        "source": "com.farego.app-main-45:/layout/activity_profile.xml"
-    },
-    {
         "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\layout_activity_history.xml.flat",
         "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\activity_history.xml"
     },
@@ -198,6 +194,10 @@
     {
         "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\layout_activity_splash.xml.flat",
         "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\activity_splash.xml"
+    },
+    {
+        "merged": "com.farego.app-merged_res-43:/layout_activity_main.xml.flat",
+        "source": "com.farego.app-main-45:/layout/activity_main.xml"
     },
     {
         "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_tab_indicator_selector.xml.flat",

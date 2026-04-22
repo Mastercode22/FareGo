@@ -12,7 +12,9 @@ import android.view.View;
 import android.widget.*;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -30,11 +32,19 @@ import com.farego.app.utils.FareCalculator;
 import com.farego.app.utils.PolylineDecoder;
 import com.farego.app.utils.SessionManager;
 
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.FetchPlaceRequest;
+import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
+import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+
+// Geocoder imports for reverse geocoding map taps
+import android.location.Address;
+import android.location.Geocoder;
 
 import com.google.android.gms.location.*;
 import com.google.android.gms.maps.*;
@@ -43,6 +53,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -59,7 +70,6 @@ public class MainActivity extends AppCompatActivity
     private static final int PERM_LOCATION   = 100;
     private static final int REQ_DESTINATION = 200;
 
-    // Only reroute if user is more than 50m off the route
     private static final float REROUTE_THRESHOLD_METERS = 50f;
 
     // Map & Location
@@ -71,7 +81,6 @@ public class MainActivity extends AppCompatActivity
     private Marker destMarker;
     private Polyline routePolyline;
 
-    // Track whether a reroute fetch is already in flight
     private boolean isRerouting = false;
 
     // UI
@@ -87,6 +96,9 @@ public class MainActivity extends AppCompatActivity
     private FareCalculator.TransportType selectedTransport = FareCalculator.TransportType.TROTRO;
     private FareCalculator.TrafficCondition trafficCondition = FareCalculator.TrafficCondition.LOW;
     private boolean tripActive = false;
+
+    // Trip tracking for summary
+    private long tripStartTimeMs = 0;
 
     // Services
     private TextToSpeech tts;
@@ -113,6 +125,7 @@ public class MainActivity extends AppCompatActivity
         setupLocationClient();
         setupClickListeners();
         setupBottomNav();
+        adjustCardForBottomNav();
 
         int reuseId = getIntent().getIntExtra("reuse_route_id", -1);
         if (reuseId != -1) {
@@ -137,6 +150,22 @@ public class MainActivity extends AppCompatActivity
         bottomNav      = findViewById(R.id.bottom_nav);
     }
 
+    private void adjustCardForBottomNav() {
+        bottomNav.post(() -> {
+            int navHeight = bottomNav.getHeight();
+
+            CoordinatorLayout.LayoutParams cardParams =
+                    (CoordinatorLayout.LayoutParams) cardTripInfo.getLayoutParams();
+            cardParams.bottomMargin = navHeight + 16;
+            cardTripInfo.setLayoutParams(cardParams);
+
+            CoordinatorLayout.LayoutParams fabParams =
+                    (CoordinatorLayout.LayoutParams) fabMyLocation.getLayoutParams();
+            fabParams.bottomMargin = navHeight + 100;
+            fabMyLocation.setLayoutParams(fabParams);
+        });
+    }
+
     private void setupMap() {
         SupportMapFragment mapFragment = (SupportMapFragment)
                 getSupportFragmentManager().findFragmentById(R.id.map_fragment);
@@ -153,10 +182,8 @@ public class MainActivity extends AppCompatActivity
                         result.getLastLocation().getLatitude(),
                         result.getLastLocation().getLongitude());
 
-                // Always update the marker position only — no camera movement
                 updateUserMarker(currentLatLng);
 
-                // Only reroute if trip is active AND user has gone off route
                 if (tripActive && currentRoute != null) {
                     if (!isOnRoute(currentLatLng)) {
                         reroute();
@@ -166,23 +193,16 @@ public class MainActivity extends AppCompatActivity
         };
     }
 
-    // Check if current position is within 50m of any point on the route
-    // true  = still on route, do nothing
-    // false = off route, trigger reroute
     private boolean isOnRoute(LatLng currentPos) {
         if (routePolyline == null) return false;
-
         List<LatLng> points = routePolyline.getPoints();
         for (LatLng point : points) {
             float[] result = new float[1];
             Location.distanceBetween(
                     currentPos.latitude, currentPos.longitude,
                     point.latitude,      point.longitude,
-                    result
-            );
-            if (result[0] < REROUTE_THRESHOLD_METERS) {
-                return true;
-            }
+                    result);
+            if (result[0] < REROUTE_THRESHOLD_METERS) return true;
         }
         return false;
     }
@@ -193,14 +213,17 @@ public class MainActivity extends AppCompatActivity
             if (currentLatLng != null) tvOrigin.setText("My Location");
         });
         fabMyLocation.setOnClickListener(v -> {
-            if (currentLatLng != null && googleMap != null) animateCameraTo(currentLatLng, 16f);
+            if (currentLatLng != null && googleMap != null)
+                animateCameraTo(currentLatLng, 16f);
         });
         fabStartTrip.setOnClickListener(v -> {
             if (currentRoute != null) {
                 if (!tripActive) startTrip();
                 else             stopTrip();
             } else {
-                Toast.makeText(this, "Please select a destination first", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,
+                        "Please select a destination first",
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -226,14 +249,133 @@ public class MainActivity extends AppCompatActivity
     public void onMapReady(@NonNull GoogleMap map) {
         googleMap = map;
         try {
-            googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style_dark));
+            googleMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style_dark));
         } catch (Exception e) { /* style not critical */ }
         googleMap.getUiSettings().setMyLocationButtonEnabled(false);
         googleMap.getUiSettings().setZoomControlsEnabled(false);
         googleMap.getUiSettings().setTiltGesturesEnabled(true);
         LatLng accra = new LatLng(5.6037, -0.1870);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(accra, 13f));
+
+        // ── NEW: Handle map tap to set destination ───────────
+        // When user taps anywhere on the map we reverse-geocode the
+        // tapped LatLng to get a readable address, show a confirmation
+        // dialog, then call onDestinationSelected() exactly as if the
+        // user had picked it from the Places Autocomplete widget.
+        googleMap.setOnMapClickListener(latLng -> {
+            // Don't allow changing destination mid-trip
+            if (tripActive) return;
+            reverseGeocodeAndConfirm(latLng);
+        });
+
         checkLocationPermission();
+    }
+
+    // ── Reverse Geocode + Confirm Dialog ─────────────────────
+    // Converts a LatLng from a map tap into a human-readable address,
+    // then asks the user to confirm before setting it as destination.
+    private void reverseGeocodeAndConfirm(LatLng latLng) {
+        // Show a temporary marker while we look up the address
+        if (destMarker != null) destMarker.remove();
+        destMarker = googleMap.addMarker(new MarkerOptions()
+                .position(latLng)
+                .icon(BitmapDescriptorFactory.defaultMarker(
+                        BitmapDescriptorFactory.HUE_YELLOW))
+                .title("Loading address…"));
+
+        pbRouteLoading.setVisibility(View.VISIBLE);
+
+        // Geocoding is a network call — do it off the main thread
+        AppDatabase.DB_EXECUTOR.execute(() -> {
+            String resolvedName = getAddressFromLatLng(latLng);
+
+            runOnUiThread(() -> {
+                pbRouteLoading.setVisibility(View.GONE);
+
+                // Update the temporary marker with the resolved name
+                if (destMarker != null) destMarker.setTitle(resolvedName);
+
+                // Ask user to confirm this is where they want to go
+                new AlertDialog.Builder(this)
+                        .setTitle("Set as destination?")
+                        .setMessage(resolvedName)
+                        .setPositiveButton("Yes, go here", (dialog, which) -> {
+                            // Confirmed — treat exactly like autocomplete selection
+                            onDestinationSelected(resolvedName, latLng);
+                        })
+                        .setNegativeButton("Cancel", (dialog, which) -> {
+                            // Remove the temporary marker on cancel
+                            if (destMarker != null) {
+                                destMarker.remove();
+                                destMarker = null;
+                            }
+                        })
+                        .show();
+            });
+        });
+    }
+
+    // Returns the best address string for a LatLng using Android Geocoder.
+    // Falls back to a coordinate string if geocoding fails or device is offline.
+    private String getAddressFromLatLng(LatLng latLng) {
+        // Check Geocoder is available on this device
+        if (!Geocoder.isPresent()) {
+            return formatCoords(latLng);
+        }
+
+        try {
+            Geocoder geocoder = new Geocoder(this, Locale.ENGLISH);
+            List<Address> addresses = geocoder.getFromLocation(
+                    latLng.latitude, latLng.longitude, 1);
+
+            if (addresses != null && !addresses.isEmpty()) {
+                Address address = addresses.get(0);
+
+                // Build a readable name: prefer feature name or street,
+                // always append locality/city for context
+                StringBuilder sb = new StringBuilder();
+
+                // Feature name (e.g. "Accra Mall", "Kwame Nkrumah Circle")
+                String feature = address.getFeatureName();
+                // Avoid using raw coordinates as the feature name
+                if (feature != null && !feature.matches("[-0-9.]+")) {
+                    sb.append(feature);
+                }
+
+                // Street name
+                String street = address.getThoroughfare();
+                if (street != null && !street.equals(feature)) {
+                    if (sb.length() > 0) sb.append(", ");
+                    sb.append(street);
+                }
+
+                // Locality / city
+                String locality = address.getLocality();
+                if (locality != null) {
+                    if (sb.length() > 0) sb.append(", ");
+                    sb.append(locality);
+                }
+
+                // Sub-admin area as last resort (e.g. district)
+                if (sb.length() == 0) {
+                    String sub = address.getSubAdminArea();
+                    if (sub != null) sb.append(sub);
+                }
+
+                return sb.length() > 0 ? sb.toString() : formatCoords(latLng);
+            }
+        } catch (IOException e) {
+            // Network error or geocoder unavailable — fall through to coords
+        }
+
+        return formatCoords(latLng);
+    }
+
+    // Formats a LatLng as a readable coordinate string fallback
+    private String formatCoords(LatLng latLng) {
+        return String.format(Locale.ENGLISH, "%.5f, %.5f",
+                latLng.latitude, latLng.longitude);
     }
 
     // ── Permissions ──────────────────────────────────────────
@@ -248,7 +390,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onRequestPermissionsResult(int code, @NonNull String[] perms, @NonNull int[] results) {
+    public void onRequestPermissionsResult(int code, @NonNull String[] perms,
+                                           @NonNull int[] results) {
         super.onRequestPermissionsResult(code, perms, results);
         if (code == PERM_LOCATION && results.length > 0
                 && results[0] == PackageManager.PERMISSION_GRANTED)
@@ -286,7 +429,8 @@ public class MainActivity extends AppCompatActivity
             startActivityForResult(intent, REQ_DESTINATION);
         } catch (Exception e) {
             Toast.makeText(this,
-                    "Search unavailable. Check your API key.", Toast.LENGTH_LONG).show();
+                    "Search unavailable. Check your API key.",
+                    Toast.LENGTH_LONG).show();
         }
     }
 
@@ -319,22 +463,21 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    // ── Single entry point for any destination selection ─────
+    // Called by both the autocomplete widget AND the map tap confirm dialog
     public void onDestinationSelected(String name, LatLng latLng) {
         tvDestination.setText(name);
-        placeDestMarker(latLng);
+        placeDestMarker(latLng); // replaces any temporary tap marker
         if (currentLatLng == null) {
             Toast.makeText(this, "Waiting for GPS…", Toast.LENGTH_SHORT).show();
             return;
         }
         currentRoute = new RouteInfo(currentLatLng, "My Location", latLng, name);
-        // true = animate camera to fit full route on screen (first load only)
         fetchRoute(currentRoute, true);
         showTransportSheet();
     }
 
     // ── Route Fetching ───────────────────────────────────────
-    // animateCamera = true  → zoom to fit route (destination selected / history reuse)
-    // animateCamera = false → just redraw polyline, leave camera alone (reroute)
     private void fetchRoute(RouteInfo route, boolean animateCamera) {
         pbRouteLoading.setVisibility(View.VISIBLE);
         String origin = route.originLatLng.latitude + "," + route.originLatLng.longitude;
@@ -393,7 +536,7 @@ public class MainActivity extends AppCompatActivity
 
     private void offlineFallback(RouteInfo route) {
         double distKm = haversine(
-                route.originLatLng.latitude,    route.originLatLng.longitude,
+                route.originLatLng.latitude,      route.originLatLng.longitude,
                 route.destinationLatLng.latitude, route.destinationLatLng.longitude);
         route.distanceKm      = distKm;
         route.durationMinutes = (int)(distKm / 30.0 * 60);
@@ -423,8 +566,6 @@ public class MainActivity extends AppCompatActivity
                 .startCap(new RoundCap())
                 .endCap(new RoundCap()));
 
-        // Only zoom to fit the route when explicitly requested
-        // (first load or history reuse) — never during an active trip
         if (animateCamera) {
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
             for (LatLng p : points) builder.include(p);
@@ -442,12 +583,8 @@ public class MainActivity extends AppCompatActivity
                             BitmapDescriptorFactory.HUE_AZURE))
                     .title("You"));
         } else {
-            // Just move the marker silently — no camera change at all
             userMarker.setPosition(pos);
         }
-        // ── REMOVED: if (tripActive) animateCameraTo(pos, 17f)
-        // That line was re-animating the camera every 2-4 seconds during a trip
-        // which caused the constant zoom in/out the user was seeing
     }
 
     private void placeDestMarker(LatLng pos) {
@@ -460,11 +597,8 @@ public class MainActivity extends AppCompatActivity
                 .title("Destination"));
     }
 
-    // Only runs when tripActive is false
-    // During a trip the camera is set once in startTrip() and never touched again
     private void animateCameraTo(LatLng pos, float zoom) {
-        if (tripActive) return; // protect against any stray calls during trip
-
+        if (tripActive) return;
         CameraPosition camPos = new CameraPosition.Builder()
                 .target(pos).zoom(zoom).tilt(0f).build();
         googleMap.animateCamera(
@@ -517,20 +651,19 @@ public class MainActivity extends AppCompatActivity
                 currentLatLng != null ? currentLatLng
                         : new LatLng(history.originLat, history.originLng),
                 "My Location", dest, history.destinationLabel);
-        fetchRoute(currentRoute, true); // animate camera on history reuse
+        fetchRoute(currentRoute, true);
         showTransportSheet();
     }
 
     // ── Trip Lifecycle ───────────────────────────────────────
     private void startTrip() {
-        tripActive = true;
+        tripActive      = true;
+        tripStartTimeMs = System.currentTimeMillis();
         fabStartTrip.setText("End Trip");
         fabStartTrip.setIconResource(R.drawable.ic_stop);
         speak("Navigation started. " + tvDestination.getText()
                 + " in " + currentRoute.durationMinutes + " minutes.");
 
-        // Set camera ONCE at a comfortable zoom showing location + surroundings
-        // After this nothing moves the camera so user can freely pan and zoom
         if (currentLatLng != null && googleMap != null) {
             googleMap.animateCamera(
                     CameraUpdateFactory.newLatLngZoom(currentLatLng, 14f), 800, null);
@@ -545,22 +678,94 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void stopTrip() {
+        String  destination  = currentRoute != null ? currentRoute.destinationLabel : "Unknown";
+        double  distanceKm   = currentRoute != null ? currentRoute.distanceKm : 0;
+        int     etaMins      = currentRoute != null ? currentRoute.durationMinutes : 0;
+        String  trafficLabel = trafficCondition.label;
+        String  transport    = selectedTransport.name();
+        long    elapsedMs    = System.currentTimeMillis() - tripStartTimeMs;
+        int     elapsedMins  = (int)(elapsedMs / 60000);
+
+        AppDatabase.DB_EXECUTOR.execute(() -> {
+            FareRate rate = db.fareRateDao().getByType(selectedTransport.name());
+            FareResult result = rate != null
+                    ? FareCalculator.calculate(distanceKm, rate, trafficCondition)
+                    : FareCalculator.estimateOffline(distanceKm, selectedTransport, trafficCondition);
+            String fareRange = result.getFormattedRange();
+            runOnUiThread(() -> showTripSummaryDialog(
+                    destination, distanceKm, etaMins, elapsedMins,
+                    fareRange, trafficLabel, transport));
+        });
+
         tripActive  = false;
         isRerouting = false;
+        stopService(new Intent(this, TripNavigationService.class));
+        speak("Trip ended.");
         fabStartTrip.setText("Start Trip");
         fabStartTrip.setIconResource(R.drawable.ic_navigation);
-        speak("Trip ended.");
-        stopService(new Intent(this, TripNavigationService.class));
+    }
+
+    private void showTripSummaryDialog(String destination, double distanceKm, int etaMins,
+                                       int elapsedMins, String fareRange,
+                                       String trafficLabel, String transport) {
+        String elapsedText;
+        if (elapsedMins >= 60) {
+            elapsedText = (elapsedMins / 60) + "h " + (elapsedMins % 60) + "m";
+        } else if (elapsedMins > 0) {
+            elapsedText = elapsedMins + " min";
+        } else {
+            elapsedText = "< 1 min";
+        }
+
+        String transportLabel = transport.charAt(0)
+                + transport.substring(1).toLowerCase();
+        String distanceText = String.format("%.1f km", distanceKm);
+
+        String message =
+                "🏁  Destination\n" + destination + "\n\n" +
+                        "📏  Distance\n" + distanceText + "\n\n" +
+                        "⏱  Time on trip\n" + elapsedText + "\n\n" +
+                        "🗺  Estimated duration\n" + etaMins + " min\n\n" +
+                        "🚦  Traffic condition\n" + trafficLabel + "\n\n" +
+                        "🚌  Transport type\n" + transportLabel + "\n\n" +
+                        "💰  Fare estimate\n" + fareRange;
+
+        new AlertDialog.Builder(this, R.style.FareGoDialogTheme)
+                .setTitle("Trip Summary")
+                .setMessage(message)
+                .setPositiveButton("Done", (dialog, which) -> {
+                    dialog.dismiss();
+                    resetMapToCurrentLocation();
+                })
+                .setCancelable(false)
+                .show();
+    }
+
+    private void resetMapToCurrentLocation() {
+        tvOrigin.setText("My Location");
+        tvDestination.setText("Where to?");
+        tvDestination.setTextColor(
+                getResources().getColor(R.color.text_secondary, getTheme()));
+        cardTripInfo.setVisibility(View.GONE);
+
+        if (routePolyline != null) { routePolyline.remove(); routePolyline = null; }
+        if (destMarker    != null) { destMarker.remove();    destMarker    = null; }
+
+        currentRoute = null;
+
+        if (currentLatLng != null && googleMap != null) {
+            CameraPosition camPos = new CameraPosition.Builder()
+                    .target(currentLatLng).zoom(15f).tilt(0f).build();
+            googleMap.animateCamera(
+                    CameraUpdateFactory.newCameraPosition(camPos), 1000, null);
+        }
     }
 
     private void reroute() {
-        // Guard against multiple reroute calls firing before the first one returns
         if (isRerouting) return;
         isRerouting = true;
-
         if (currentRoute == null || currentLatLng == null) return;
         currentRoute.originLatLng = currentLatLng;
-        // false = redraw polyline only, do not touch the camera
         fetchRoute(currentRoute, false);
     }
 

@@ -103,13 +103,16 @@
     </androidx.cardview.widget.CardView>
 
     <!-- ── Trip info card (shows after route fetched) ── -->
+    <!-- Note: layout_marginBottom is set to 0dp here intentionally.         -->
+    <!-- adjustCardForBottomNav() in MainActivity measures the real nav       -->
+    <!-- height at runtime and sets the correct margin dynamically.           -->
     <androidx.cardview.widget.CardView
         android:id="@+id/card_trip_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_margin="16dp"
-        android:layout_marginBottom="72dp"
+        android:layout_marginBottom="0dp"
         android:visibility="gone"
         app:cardCornerRadius="20dp"
         app:cardBackgroundColor="@color/surface_dark"
@@ -121,7 +124,7 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- ETA / Distance row -->
+            <!-- ETA / Distance / Fare row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -233,14 +236,15 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- ── FABs ── -->
+    <!-- ── FAB My Location ── -->
+    <!-- Note: layout_marginBottom is also set by adjustCardForBottomNav()    -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_my_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:layout_marginBottom="148dp"
+        android:layout_marginBottom="0dp"
         app:srcCompat="@drawable/ic_my_location"
         app:backgroundTint="@color/surface_dark"
         app:tint="@color/yellow_accent"
