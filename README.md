@@ -5,6 +5,8 @@ FareGo is an intelligent mobile application designed to simplify and modernize d
 
 <img width="498" height="1080" alt="image" src="https://github.com/user-attachments/assets/d2383c4b-553b-4a0d-8b9b-904269fd7e11" />
 <img width="498" height="1080" alt="image" src="https://github.com/user-attachments/assets/1d11db20-3177-4056-8d2c-a8d11ddb6afa" />
+<img width="498" height="1080" alt="WhatsApp Image 2026-04-22 at 5 29 01 PM" src="https://github.com/user-attachments/assets/b62651b4-6d32-41e1-88ec-4f6f151d41d7" />
+
 
 
 
