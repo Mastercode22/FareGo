@@ -1,6 +1,8 @@
 # FareGo 🚌🗺️
 **Smart Travel Assistant for Ghana — powered by Google Maps & real-time fare estimation**
 
+FareGo is an intelligent mobile application designed to simplify and modernize daily commuting in Ghana. The platform leverages real-time mapping, route optimization, and dynamic fare estimation to help users navigate unfamiliar routes with confidence, accuracy, and convenience.
+
 <img width="498" height="1080" alt="image" src="https://github.com/user-attachments/assets/d2383c4b-553b-4a0d-8b9b-904269fd7e11" />
 <img width="498" height="1080" alt="image" src="https://github.com/user-attachments/assets/1d11db20-3177-4056-8d2c-a8d11ddb6afa" />
 
