@@ -1,0 +1,107 @@
+// ============================================================
+// FILE: app/build.gradle
+// PURPOSE: All dependencies for FareGo Android app
+// ============================================================
+
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.farego.app'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.farego.app"
+        minSdk 24
+        targetSdk 34
+        versionCode 2
+        versionName "2.0"
+
+        // Load API keys from local.properties (never hardcode keys here)
+        def localProps = new Properties()
+        def localPropsFile = rootProject.file("local.properties")
+        if (localPropsFile.exists()) {
+            localPropsFile.withInputStream { localProps.load(it) }
+        }
+        manifestPlaceholders["MAPS_API_KEY"]    = localProps['MAPS_API_KEY'] ?: ''
+        buildConfigField "String", "MAPS_API_KEY",    "\"${localProps['MAPS_API_KEY'] ?: ''}\""
+        buildConfigField "String", "ORS_API_KEY",     "\"${localProps['ORS_API_KEY'] ?: ''}\""
+        buildConfigField "String", "MAPTILER_KEY",    "\"${localProps['MAPTILER_KEY'] ?: ''}\""
+        buildConfigField "String", "FAREGO_BASE_URL", "\"${localProps['FAREGO_BASE_URL'] ?: 'http://192.168.1.100/farego/'}\""
+        buildConfigField "String", "ADMIN_SECRET",    "\"${localProps['ADMIN_SECRET'] ?: 'FG_s3cr3t_2024'}\""
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    buildFeatures {
+        buildConfig true
+        viewBinding true
+    }
+}
+
+dependencies {
+    // ── AndroidX Core ────────────────────────────────────────
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.cardview:cardview:1.0.0'
+
+    // ── Material Design ───────────────────────────────────────
+    implementation 'com.google.android.material:material:1.11.0'
+
+    // ── Lifecycle / ViewModel / LiveData ──────────────────────
+    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.7.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata:2.7.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime:2.7.0'
+
+    // ── Room (SQLite local cache) ─────────────────────────────
+    def room_version = "2.6.1"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    // ── Retrofit + OkHttp (networking) ────────────────────────
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0'
+
+    // ── Google Maps SDK ───────────────────────────────────────
+    implementation 'com.google.android.gms:play-services-maps:18.2.0'
+
+    // ── Google Play Location (GPS / FusedLocationProvider) ───
+    implementation 'com.google.android.gms:play-services-location:21.1.0'
+
+    // ── Google Places Autocomplete ────────────────────────────
+    implementation 'com.google.android.libraries.places:places:3.3.0'
+
+    // ── RecyclerView ──────────────────────────────────────────
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+
+    // ── Glide (image loading for profile pictures) ────────────
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.16.0'
+
+    // ── CircleImageView ───────────────────────────────────────
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    // ── Lottie animations ─────────────────────────────────────
+    implementation 'com.airbnb.android:lottie:6.4.0'
+
+    // ── Testing ───────────────────────────────────────────────
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}

@@ -1,0 +1,214 @@
+[
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\layout_activity_trip_detail.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\activity_trip_detail.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_ic_onboard_go.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\ic_onboard_go.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\mipmap-mdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\mipmap-mdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_bg_transport_icon.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\bg_transport_icon.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\mipmap-mdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_ic_stop.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\ic_stop.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\color_nav_item_color.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\color\\nav_item_color.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_ic_my_location.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\ic_my_location.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_ic_history.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\ic_history.xml"
+    },
+    {
+        "merged": "com.farego.app-merged_res-43:/drawable_ic_avatar_placeholder.xml.flat",
+        "source": "com.farego.app-main-45:/drawable/ic_avatar_placeholder.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_bg_icon_button.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\bg_icon_button.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_bg_badge.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\bg_badge.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\mipmap-xhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\mipmap-xxhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_ic_profile_placeholder.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\ic_profile_placeholder.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_ic_map.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\ic_map.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\xml_data_extraction_rules.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\xml\\data_extraction_rules.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\layout_activity_profile.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\activity_profile.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_ic_star_outline.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\ic_star_outline.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\mipmap-hdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\xml_file_provider_paths.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\xml\\file_provider_paths.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\menu_bottom_nav_menu.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\menu\\bottom_nav_menu.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\mipmap-xxxhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\layout_activity_auth.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\activity_auth.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_ic_navigation.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\ic_navigation.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_ic_star_filled.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\ic_star_filled.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\font_poppins_regular.ttf.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\font\\poppins_regular.ttf"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\color_bottom_nav_selector.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\color\\bottom_nav_selector.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_ic_onboard_fare.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\ic_onboard_fare.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\mipmap-xhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_ic_arrow_back.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\ic_arrow_back.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\layout_activity_onboarding.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\activity_onboarding.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\layout_activity_main.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_ic_profile.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\ic_profile.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_ic_location_pin_yellow.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\ic_location_pin_yellow.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\raw_map_style_dark.json.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\raw\\map_style_dark.json"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\xml_backup_rules.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\xml\\backup_rules.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\mipmap-xxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "com.farego.app-merged_res-43:/layout_activity_profile.xml.flat",
+        "source": "com.farego.app-main-45:/layout/activity_profile.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\layout_activity_history.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\activity_history.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\layout_item_route_history.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\item_route_history.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_ic_onboard_map.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\ic_onboard_map.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_bg_bottom_sheet.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\bg_bottom_sheet.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\mipmap-hdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\mipmap-hdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\mipmap-xxxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\layout_item_onboarding_page.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\item_onboarding_page.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\font_poppins.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\font\\poppins.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\font_poppins_bold.ttf.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\font\\poppins_bold.ttf"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_ic_location_dot_blue.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\ic_location_dot_blue.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\layout_activity_splash.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\activity_splash.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_tab_indicator_selector.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\tab_indicator_selector.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\layout_bottom_sheet_transport.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\bottom_sheet_transport.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_ic_farego_logo.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\ic_farego_logo.xml"
+    }
+]

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  NOTE FOR DEVELOPER:
+  Download Poppins-Regular.ttf and Poppins-Bold.ttf from:
+    https://fonts.google.com/specimen/Poppins
+  Place them in:
+    app/src/main/res/font/poppins_regular.ttf
+    app/src/main/res/font/poppins_bold.ttf
+
+  Until then, the app will use the system default sans-serif font.
+-->
+<font-family xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <font
+        android:font="@font/poppins_regular"
+        android:fontStyle="normal"
+        android:fontWeight="400"
+        app:font="@font/poppins_regular"
+        app:fontStyle="normal"
+        app:fontWeight="400"/>
+
+    <font
+        android:font="@font/poppins_bold"
+        android:fontStyle="normal"
+        android:fontWeight="700"
+        app:font="@font/poppins_bold"
+        app:fontStyle="normal"
+        app:fontWeight="700"/>
+
+</font-family>

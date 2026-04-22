@@ -1,0 +1,388 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.farego.app"
+4    android:versionCode="2"
+5    android:versionName="2.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="24"
+9        android:targetSdkVersion="34" />
+10
+11    <!-- Location permissions -->
+12    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+12-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:6:5-79
+12-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:6:22-76
+13    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+13-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:7:5-81
+13-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:7:22-78
+14    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+14-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:8:5-85
+14-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:8:22-82
+15
+16    <!-- Network -->
+17    <uses-permission android:name="android.permission.INTERNET" />
+17-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:11:5-67
+17-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:11:22-64
+18    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+18-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:12:5-79
+18-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:12:22-76
+19
+20    <!-- Notifications -->
+21    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+21-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:15:5-77
+21-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:15:22-74
+22    <uses-permission android:name="android.permission.VIBRATE" />
+22-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:16:5-66
+22-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:16:22-63
+23    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+23-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:17:5-77
+23-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:17:22-74
+24
+25    <!-- FIX 1: Required on Android 14+ for foreground services with location type -->
+26    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+26-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:20:5-86
+26-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:20:22-83
+27
+28    <!-- Storage (for profile pictures) -->
+29    <uses-permission
+29-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:23:5-24:38
+30        android:name="android.permission.READ_EXTERNAL_STORAGE"
+30-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:23:22-77
+31        android:maxSdkVersion="32" />
+31-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:24:9-35
+32    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+32-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:25:5-76
+32-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:25:22-73
+33
+34    <!-- Camera -->
+35    <uses-permission android:name="android.permission.CAMERA" />
+35-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:28:5-65
+35-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:28:22-62
+36    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+36-->[com.google.android.libraries.places:places:3.3.0] C:\Users\user\.gradle\caches\8.9\transforms\708b9c147ff55fa0e903fb144ed0e34c\transformed\jetified-places-3.3.0\AndroidManifest.xml:11:5-76
+36-->[com.google.android.libraries.places:places:3.3.0] C:\Users\user\.gradle\caches\8.9\transforms\708b9c147ff55fa0e903fb144ed0e34c\transformed\jetified-places-3.3.0\AndroidManifest.xml:11:22-73
+37
+38    <uses-feature
+38-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\user\.gradle\caches\8.9\transforms\610494c248c2d16c573ae90bbe60afd5\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:26:5-28:35
+39        android:glEsVersion="0x00020000"
+39-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\user\.gradle\caches\8.9\transforms\610494c248c2d16c573ae90bbe60afd5\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:27:9-41
+40        android:required="true" />
+40-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\user\.gradle\caches\8.9\transforms\610494c248c2d16c573ae90bbe60afd5\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:28:9-32
+41
+42    <queries>
+42-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\user\.gradle\caches\8.9\transforms\610494c248c2d16c573ae90bbe60afd5\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:30:5-34:15
+43
+44        <!-- Needs to be explicitly declared on Android R+ -->
+45        <package android:name="com.google.android.apps.maps" />
+45-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\user\.gradle\caches\8.9\transforms\610494c248c2d16c573ae90bbe60afd5\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:33:9-64
+45-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\user\.gradle\caches\8.9\transforms\610494c248c2d16c573ae90bbe60afd5\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:33:18-61
+46    </queries>
+47
+48    <permission
+48-->[androidx.core:core:1.12.0] C:\Users\user\.gradle\caches\8.9\transforms\11277b3cad23f480d6488067ff2fe0c0\transformed\core-1.12.0\AndroidManifest.xml:22:5-24:47
+49        android:name="com.farego.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+49-->[androidx.core:core:1.12.0] C:\Users\user\.gradle\caches\8.9\transforms\11277b3cad23f480d6488067ff2fe0c0\transformed\core-1.12.0\AndroidManifest.xml:23:9-81
+50        android:protectionLevel="signature" />
+50-->[androidx.core:core:1.12.0] C:\Users\user\.gradle\caches\8.9\transforms\11277b3cad23f480d6488067ff2fe0c0\transformed\core-1.12.0\AndroidManifest.xml:24:9-44
+51
+52    <uses-permission android:name="com.farego.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+52-->[androidx.core:core:1.12.0] C:\Users\user\.gradle\caches\8.9\transforms\11277b3cad23f480d6488067ff2fe0c0\transformed\core-1.12.0\AndroidManifest.xml:26:5-97
+52-->[androidx.core:core:1.12.0] C:\Users\user\.gradle\caches\8.9\transforms\11277b3cad23f480d6488067ff2fe0c0\transformed\core-1.12.0\AndroidManifest.xml:26:22-94
+53
+54    <application
+54-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:30:5-128:19
+55        android:name="com.farego.app.FareGoApp"
+55-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:31:9-34
+56        android:allowBackup="true"
+56-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:32:9-35
+57        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+57-->[androidx.core:core:1.12.0] C:\Users\user\.gradle\caches\8.9\transforms\11277b3cad23f480d6488067ff2fe0c0\transformed\core-1.12.0\AndroidManifest.xml:28:18-86
+58        android:dataExtractionRules="@xml/data_extraction_rules"
+58-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:33:9-65
+59        android:debuggable="true"
+60        android:extractNativeLibs="false"
+61        android:fullBackupContent="@xml/backup_rules"
+61-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:34:9-54
+62        android:icon="@mipmap/ic_launcher"
+62-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:35:9-43
+63        android:label="@string/app_name"
+63-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:36:9-41
+64        android:roundIcon="@mipmap/ic_launcher_round"
+64-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:37:9-54
+65        android:supportsRtl="true"
+65-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:38:9-35
+66        android:testOnly="true"
+67        android:theme="@style/Theme.FareGo"
+67-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:39:9-44
+68        android:usesCleartextTraffic="true" >
+68-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:40:9-44
+69
+70        <!-- Splash / Launch screen -->
+71        <activity
+71-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:44:9-52:20
+72            android:name="com.farego.app.activities.SplashActivity"
+72-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:45:13-54
+73            android:exported="true"
+73-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:46:13-36
+74            android:theme="@style/Theme.FareGo.Splash" >
+74-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:47:13-55
+75            <intent-filter>
+75-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:48:13-51:29
+76                <action android:name="android.intent.action.MAIN" />
+76-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:49:17-69
+76-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:49:25-66
+77
+78                <category android:name="android.intent.category.LAUNCHER" />
+78-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:50:17-77
+78-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:50:27-74
+79            </intent-filter>
+80        </activity>
+81
+82        <!-- Onboarding -->
+83        <activity
+83-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:55:9-57:40
+84            android:name="com.farego.app.activities.OnboardingActivity"
+84-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:56:13-58
+85            android:exported="false" />
+85-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:57:13-37
+86
+87        <!-- Auth -->
+88        <activity
+88-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:60:9-63:58
+89            android:name="com.farego.app.activities.AuthActivity"
+89-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:61:13-52
+90            android:exported="false"
+90-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:62:13-37
+91            android:windowSoftInputMode="adjustResize" />
+91-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:63:13-55
+92
+93        <!-- Main map activity -->
+94        <activity
+94-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:66:9-70:55
+95            android:name="com.farego.app.activities.MainActivity"
+95-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:67:13-52
+96            android:configChanges="orientation|screenSize"
+96-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:69:13-59
+97            android:exported="false"
+97-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:68:13-37
+98            android:windowSoftInputMode="adjustPan" />
+98-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:70:13-52
+99
+100        <!-- Profile -->
+101        <activity
+101-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:73:9-76:58
+102            android:name="com.farego.app.activities.ProfileActivity"
+102-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:74:13-55
+103            android:exported="false"
+103-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:75:13-37
+104            android:windowSoftInputMode="adjustResize" />
+104-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:76:13-55
+105
+106        <!-- History -->
+107        <activity
+107-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:79:9-81:40
+108            android:name="com.farego.app.activities.HistoryActivity"
+108-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:80:13-55
+109            android:exported="false" />
+109-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:81:13-37
+110
+111        <!-- Trip Detail -->
+112        <activity
+112-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:84:9-86:40
+113            android:name="com.farego.app.activities.TripDetailActivity"
+113-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:85:13-58
+114            android:exported="false" />
+114-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:86:13-37
+115
+116        <!-- Google Maps API key -->
+117        <meta-data
+118            android:name="com.google.android.geo.API_KEY"
+118-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:90:13-58
+119            android:value="AIzaSyDHpCAR4EXVocbbZFQxSanCKL_LV_I5aMI" />
+119-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:91:13-44
+120
+121        <!--
+122             FIX 2: Added foregroundServiceType="location" is correct but also
+123             needs the notification channel ID to exist before startForeground()
+124             is called — handled by FareGoApp.onCreate()
+125        -->
+126        <service
+126-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:96:9-99:56
+127            android:name="com.farego.app.service.TripNavigationService"
+127-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:97:13-58
+128            android:exported="false"
+128-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:98:13-37
+129            android:foregroundServiceType="location" />
+129-->C:\Users\user\Downloads\FareGo_Enhanced\FareGo\app\src\main\AndroidManifest.xml:99:13-53
+130
+131        <!--
+132     ============================================================
+133     ALSO ADD to UserProfile.java entity — two new columns for
+134     home/work location strings. If you are using Room migrations,
+135     bump your DB version and add a migration. If you use
+136     fallbackToDestructiveMigration() (which you already do),
+137     just bump the version number in @Database from 4 to 5.
+138     ============================================================
+139
+140     In UserProfile.java add:
+141
+142     @ColumnInfo(name = "home_location")
+143     public String homeLocation;
+144
+145     @ColumnInfo(name = "work_location")
+146     public String workLocation;
+147
+148     In AppDatabase.java change:
+149     version = 4  →  version = 5
+150        -->
+151
+152
+153        <!--
+154             FIX 3: Remove NotificationReceiver if the class doesn't exist,
+155             it causes a crash at install time
+156        -->
+157        <!-- DELETED: <receiver android:name=".service.NotificationReceiver" ... /> -->
+158
+159        <activity
+159-->[com.google.android.libraries.places:places:3.3.0] C:\Users\user\.gradle\caches\8.9\transforms\708b9c147ff55fa0e903fb144ed0e34c\transformed\jetified-places-3.3.0\AndroidManifest.xml:15:9-21:20
+160            android:name="com.google.android.libraries.places.widget.AutocompleteActivity"
+160-->[com.google.android.libraries.places:places:3.3.0] C:\Users\user\.gradle\caches\8.9\transforms\708b9c147ff55fa0e903fb144ed0e34c\transformed\jetified-places-3.3.0\AndroidManifest.xml:16:13-91
+161            android:exported="false"
+161-->[com.google.android.libraries.places:places:3.3.0] C:\Users\user\.gradle\caches\8.9\transforms\708b9c147ff55fa0e903fb144ed0e34c\transformed\jetified-places-3.3.0\AndroidManifest.xml:17:13-37
+162            android:label="@string/places_autocomplete_label"
+162-->[com.google.android.libraries.places:places:3.3.0] C:\Users\user\.gradle\caches\8.9\transforms\708b9c147ff55fa0e903fb144ed0e34c\transformed\jetified-places-3.3.0\AndroidManifest.xml:18:13-62
+163            android:theme="@style/PlacesAutocompleteOverlay"
+163-->[com.google.android.libraries.places:places:3.3.0] C:\Users\user\.gradle\caches\8.9\transforms\708b9c147ff55fa0e903fb144ed0e34c\transformed\jetified-places-3.3.0\AndroidManifest.xml:19:13-61
+164            android:windowSoftInputMode="adjustResize" >
+164-->[com.google.android.libraries.places:places:3.3.0] C:\Users\user\.gradle\caches\8.9\transforms\708b9c147ff55fa0e903fb144ed0e34c\transformed\jetified-places-3.3.0\AndroidManifest.xml:20:13-55
+165        </activity>
+166
+167        <provider
+167-->[androidx.emoji2:emoji2:1.2.0] C:\Users\user\.gradle\caches\8.9\transforms\c1da7ab6cb7cc87b6a302e26ee3c9c62\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
+168            android:name="androidx.startup.InitializationProvider"
+168-->[androidx.emoji2:emoji2:1.2.0] C:\Users\user\.gradle\caches\8.9\transforms\c1da7ab6cb7cc87b6a302e26ee3c9c62\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:25:13-67
+169            android:authorities="com.farego.app.androidx-startup"
+169-->[androidx.emoji2:emoji2:1.2.0] C:\Users\user\.gradle\caches\8.9\transforms\c1da7ab6cb7cc87b6a302e26ee3c9c62\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:26:13-68
+170            android:exported="false" >
+170-->[androidx.emoji2:emoji2:1.2.0] C:\Users\user\.gradle\caches\8.9\transforms\c1da7ab6cb7cc87b6a302e26ee3c9c62\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:27:13-37
+171            <meta-data
+171-->[androidx.emoji2:emoji2:1.2.0] C:\Users\user\.gradle\caches\8.9\transforms\c1da7ab6cb7cc87b6a302e26ee3c9c62\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
+172                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+172-->[androidx.emoji2:emoji2:1.2.0] C:\Users\user\.gradle\caches\8.9\transforms\c1da7ab6cb7cc87b6a302e26ee3c9c62\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:30:17-75
+173                android:value="androidx.startup" />
+173-->[androidx.emoji2:emoji2:1.2.0] C:\Users\user\.gradle\caches\8.9\transforms\c1da7ab6cb7cc87b6a302e26ee3c9c62\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:31:17-49
+174            <meta-data
+174-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\user\.gradle\caches\8.9\transforms\288408d912a561185990be7f993e1fcc\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:29:13-31:52
+175                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+175-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\user\.gradle\caches\8.9\transforms\288408d912a561185990be7f993e1fcc\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:30:17-78
+176                android:value="androidx.startup" />
+176-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\user\.gradle\caches\8.9\transforms\288408d912a561185990be7f993e1fcc\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:31:17-49
+177            <meta-data
+177-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\8.9\transforms\9b26d396e10ef68a4f332c6299c0ffec\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:29:13-31:52
+178                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+178-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\8.9\transforms\9b26d396e10ef68a4f332c6299c0ffec\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:30:17-85
+179                android:value="androidx.startup" />
+179-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\8.9\transforms\9b26d396e10ef68a4f332c6299c0ffec\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:31:17-49
+180        </provider> <!-- Needs to be explicitly declared on P+ -->
+181        <uses-library
+181-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\user\.gradle\caches\8.9\transforms\610494c248c2d16c573ae90bbe60afd5\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:39:9-41:40
+182            android:name="org.apache.http.legacy"
+182-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\user\.gradle\caches\8.9\transforms\610494c248c2d16c573ae90bbe60afd5\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:40:13-50
+183            android:required="false" />
+183-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\user\.gradle\caches\8.9\transforms\610494c248c2d16c573ae90bbe60afd5\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:41:13-37
+184
+185        <activity
+185-->[com.google.android.gms:play-services-base:18.1.0] C:\Users\user\.gradle\caches\8.9\transforms\2540139ebc5fcac66f6f82c132511f5e\transformed\jetified-play-services-base-18.1.0\AndroidManifest.xml:20:9-22:45
+186            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+186-->[com.google.android.gms:play-services-base:18.1.0] C:\Users\user\.gradle\caches\8.9\transforms\2540139ebc5fcac66f6f82c132511f5e\transformed\jetified-play-services-base-18.1.0\AndroidManifest.xml:20:19-85
+187            android:exported="false"
+187-->[com.google.android.gms:play-services-base:18.1.0] C:\Users\user\.gradle\caches\8.9\transforms\2540139ebc5fcac66f6f82c132511f5e\transformed\jetified-play-services-base-18.1.0\AndroidManifest.xml:22:19-43
+188            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+188-->[com.google.android.gms:play-services-base:18.1.0] C:\Users\user\.gradle\caches\8.9\transforms\2540139ebc5fcac66f6f82c132511f5e\transformed\jetified-play-services-base-18.1.0\AndroidManifest.xml:21:19-78
+189
+190        <meta-data
+190-->[com.google.android.gms:play-services-basement:18.1.0] C:\Users\user\.gradle\caches\8.9\transforms\1faa131af5bceb3d01a48619bdc980a4\transformed\jetified-play-services-basement-18.1.0\AndroidManifest.xml:21:9-23:69
+191            android:name="com.google.android.gms.version"
+191-->[com.google.android.gms:play-services-basement:18.1.0] C:\Users\user\.gradle\caches\8.9\transforms\1faa131af5bceb3d01a48619bdc980a4\transformed\jetified-play-services-basement-18.1.0\AndroidManifest.xml:22:13-58
+192            android:value="@integer/google_play_services_version" />
+192-->[com.google.android.gms:play-services-basement:18.1.0] C:\Users\user\.gradle\caches\8.9\transforms\1faa131af5bceb3d01a48619bdc980a4\transformed\jetified-play-services-basement-18.1.0\AndroidManifest.xml:23:13-66
+193
+194        <service
+194-->[androidx.room:room-runtime:2.6.1] C:\Users\user\.gradle\caches\8.9\transforms\ef176a20bd28b0bb6541416706a1e4c9\transformed\room-runtime-2.6.1\AndroidManifest.xml:24:9-28:63
+195            android:name="androidx.room.MultiInstanceInvalidationService"
+195-->[androidx.room:room-runtime:2.6.1] C:\Users\user\.gradle\caches\8.9\transforms\ef176a20bd28b0bb6541416706a1e4c9\transformed\room-runtime-2.6.1\AndroidManifest.xml:25:13-74
+196            android:directBootAware="true"
+196-->[androidx.room:room-runtime:2.6.1] C:\Users\user\.gradle\caches\8.9\transforms\ef176a20bd28b0bb6541416706a1e4c9\transformed\room-runtime-2.6.1\AndroidManifest.xml:26:13-43
+197            android:exported="false" />
+197-->[androidx.room:room-runtime:2.6.1] C:\Users\user\.gradle\caches\8.9\transforms\ef176a20bd28b0bb6541416706a1e4c9\transformed\room-runtime-2.6.1\AndroidManifest.xml:27:13-37
+198
+199        <receiver
+199-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\8.9\transforms\9b26d396e10ef68a4f332c6299c0ffec\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:34:9-52:20
+200            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+200-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\8.9\transforms\9b26d396e10ef68a4f332c6299c0ffec\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:35:13-76
+201            android:directBootAware="false"
+201-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\8.9\transforms\9b26d396e10ef68a4f332c6299c0ffec\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:36:13-44
+202            android:enabled="true"
+202-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\8.9\transforms\9b26d396e10ef68a4f332c6299c0ffec\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:37:13-35
+203            android:exported="true"
+203-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\8.9\transforms\9b26d396e10ef68a4f332c6299c0ffec\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:38:13-36
+204            android:permission="android.permission.DUMP" >
+204-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\8.9\transforms\9b26d396e10ef68a4f332c6299c0ffec\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:39:13-57
+205            <intent-filter>
+205-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\8.9\transforms\9b26d396e10ef68a4f332c6299c0ffec\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:40:13-42:29
+206                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+206-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\8.9\transforms\9b26d396e10ef68a4f332c6299c0ffec\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:41:17-91
+206-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\8.9\transforms\9b26d396e10ef68a4f332c6299c0ffec\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:41:25-88
+207            </intent-filter>
+208            <intent-filter>
+208-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\8.9\transforms\9b26d396e10ef68a4f332c6299c0ffec\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:43:13-45:29
+209                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+209-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\8.9\transforms\9b26d396e10ef68a4f332c6299c0ffec\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:44:17-85
+209-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\8.9\transforms\9b26d396e10ef68a4f332c6299c0ffec\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:44:25-82
+210            </intent-filter>
+211            <intent-filter>
+211-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\8.9\transforms\9b26d396e10ef68a4f332c6299c0ffec\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:46:13-48:29
+212                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+212-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\8.9\transforms\9b26d396e10ef68a4f332c6299c0ffec\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:47:17-88
+212-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\8.9\transforms\9b26d396e10ef68a4f332c6299c0ffec\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:47:25-85
+213            </intent-filter>
+214            <intent-filter>
+214-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\8.9\transforms\9b26d396e10ef68a4f332c6299c0ffec\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:49:13-51:29
+215                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+215-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\8.9\transforms\9b26d396e10ef68a4f332c6299c0ffec\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:50:17-95
+215-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\8.9\transforms\9b26d396e10ef68a4f332c6299c0ffec\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:50:25-92
+216            </intent-filter>
+217        </receiver>
+218
+219        <service
+219-->[com.google.android.datatransport:transport-backend-cct:2.3.0] C:\Users\user\.gradle\caches\8.9\transforms\d58b33f0384bbc416578ddcb3afd78dd\transformed\jetified-transport-backend-cct-2.3.0\AndroidManifest.xml:29:9-35:19
+220            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
+220-->[com.google.android.datatransport:transport-backend-cct:2.3.0] C:\Users\user\.gradle\caches\8.9\transforms\d58b33f0384bbc416578ddcb3afd78dd\transformed\jetified-transport-backend-cct-2.3.0\AndroidManifest.xml:30:13-103
+221            android:exported="false" >
+221-->[com.google.android.datatransport:transport-backend-cct:2.3.0] C:\Users\user\.gradle\caches\8.9\transforms\d58b33f0384bbc416578ddcb3afd78dd\transformed\jetified-transport-backend-cct-2.3.0\AndroidManifest.xml:31:13-37
+222            <meta-data
+222-->[com.google.android.datatransport:transport-backend-cct:2.3.0] C:\Users\user\.gradle\caches\8.9\transforms\d58b33f0384bbc416578ddcb3afd78dd\transformed\jetified-transport-backend-cct-2.3.0\AndroidManifest.xml:32:13-34:39
+223                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
+223-->[com.google.android.datatransport:transport-backend-cct:2.3.0] C:\Users\user\.gradle\caches\8.9\transforms\d58b33f0384bbc416578ddcb3afd78dd\transformed\jetified-transport-backend-cct-2.3.0\AndroidManifest.xml:33:17-94
+224                android:value="cct" />
+224-->[com.google.android.datatransport:transport-backend-cct:2.3.0] C:\Users\user\.gradle\caches\8.9\transforms\d58b33f0384bbc416578ddcb3afd78dd\transformed\jetified-transport-backend-cct-2.3.0\AndroidManifest.xml:34:17-36
+225        </service>
+226        <service
+226-->[com.google.android.datatransport:transport-runtime:2.2.3] C:\Users\user\.gradle\caches\8.9\transforms\820f29dd7eccfdaffdb4b716530fcde8\transformed\jetified-transport-runtime-2.2.3\AndroidManifest.xml:26:9-30:19
+227            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+227-->[com.google.android.datatransport:transport-runtime:2.2.3] C:\Users\user\.gradle\caches\8.9\transforms\820f29dd7eccfdaffdb4b716530fcde8\transformed\jetified-transport-runtime-2.2.3\AndroidManifest.xml:27:13-117
+228            android:exported="false"
+228-->[com.google.android.datatransport:transport-runtime:2.2.3] C:\Users\user\.gradle\caches\8.9\transforms\820f29dd7eccfdaffdb4b716530fcde8\transformed\jetified-transport-runtime-2.2.3\AndroidManifest.xml:28:13-37
+229            android:permission="android.permission.BIND_JOB_SERVICE" >
+229-->[com.google.android.datatransport:transport-runtime:2.2.3] C:\Users\user\.gradle\caches\8.9\transforms\820f29dd7eccfdaffdb4b716530fcde8\transformed\jetified-transport-runtime-2.2.3\AndroidManifest.xml:29:13-69
+230        </service>
+231
+232        <receiver
+232-->[com.google.android.datatransport:transport-runtime:2.2.3] C:\Users\user\.gradle\caches\8.9\transforms\820f29dd7eccfdaffdb4b716530fcde8\transformed\jetified-transport-runtime-2.2.3\AndroidManifest.xml:32:9-34:40
+233            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
+233-->[com.google.android.datatransport:transport-runtime:2.2.3] C:\Users\user\.gradle\caches\8.9\transforms\820f29dd7eccfdaffdb4b716530fcde8\transformed\jetified-transport-runtime-2.2.3\AndroidManifest.xml:33:13-132
+234            android:exported="false" />
+234-->[com.google.android.datatransport:transport-runtime:2.2.3] C:\Users\user\.gradle\caches\8.9\transforms\820f29dd7eccfdaffdb4b716530fcde8\transformed\jetified-transport-runtime-2.2.3\AndroidManifest.xml:34:13-37
+235    </application>
+236
+237</manifest>
