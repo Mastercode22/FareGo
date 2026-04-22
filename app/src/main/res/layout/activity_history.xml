@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- res/layout/activity_history.xml -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,14 +8,15 @@
     android:orientation="vertical"
     android:background="@color/bg_dark">
 
-    <!-- Toolbar -->
+    <!-- ── Toolbar ─────────────────────────────────── -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="16dp"
-        android:paddingTop="40dp">
+        android:paddingHorizontal="16dp"
+        android:paddingTop="44dp"
+        android:paddingBottom="8dp">
 
         <ImageButton
             android:id="@+id/btn_history_back"
@@ -28,42 +30,99 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="14dp"
             android:text="Trip History"
             android:textSize="22sp"
             android:textColor="@color/text_primary"
-            android:fontFamily="@font/poppins_bold"/>
+            android:fontFamily="@font/poppins_bold"
+            android:letterSpacing="-0.01"/>
+
+        <!-- Filter chip (optional – wire up later) -->
+        <TextView
+            android:id="@+id/chip_favourites"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:text="★  Saved"
+            android:textSize="12sp"
+            android:textColor="@color/yellow_accent"
+            android:fontFamily="@font/poppins_bold"
+            android:background="@drawable/bg_chip_outline_yellow"
+            android:paddingHorizontal="12dp"
+            android:gravity="center"
+            android:layout_marginEnd="8dp"/>
 
         <Button
             android:id="@+id/btn_clear_history"
             android:layout_width="wrap_content"
-            android:layout_height="36dp"
+            android:layout_height="34dp"
             android:text="Clear"
             android:textSize="12sp"
             android:textColor="@color/error_red"
-            style="@style/Widget.MaterialComponents.Button.TextButton"/>
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:paddingHorizontal="4dp"/>
     </LinearLayout>
 
-    <!-- Empty state -->
+    <!-- ── Section label ──────────────────────────── -->
     <TextView
-        android:id="@+id/tv_history_empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="20dp"
+        android:paddingBottom="4dp"
+        android:text="Recent trips"
+        android:textSize="11sp"
+        android:textColor="@color/text_tertiary"
+        android:fontFamily="@font/poppins_regular"
+        android:letterSpacing="0.08"/>
+
+    <!-- ── Empty state ────────────────────────────── -->
+    <LinearLayout
+        android:id="@+id/layout_history_empty"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="No trips yet.\nSearch a destination to get started!"
-        android:textSize="16sp"
-        android:textColor="@color/text_secondary"
-        android:textAlignment="center"
+        android:orientation="vertical"
         android:gravity="center"
-        android:visibility="gone"/>
+        android:visibility="gone">
 
-    <!-- History list -->
+        <ImageView
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:src="@drawable/ic_history"
+            android:alpha="0.35"
+            android:contentDescription="@null"/>
+
+        <TextView
+            android:id="@+id/tv_history_empty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="No trips yet"
+            android:textSize="17sp"
+            android:textColor="@color/text_primary"
+            android:textAlignment="center"
+            android:fontFamily="@font/poppins_bold"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:paddingHorizontal="40dp"
+            android:text="Search a destination to get started!"
+            android:textSize="14sp"
+            android:textColor="@color/text_secondary"
+            android:textAlignment="center"/>
+
+    </LinearLayout>
+
+    <!-- ── History list ───────────────────────────── -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_history"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:clipToPadding="false"
-        android:padding="12dp"/>
+        android:paddingHorizontal="12dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="24dp"/>
 
 </LinearLayout>

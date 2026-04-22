@@ -1,103 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+
+<!--
+  REQUIREMENTS FOR GLOW EFFECT:
+  1. Add `card_glow_layer.xml` as a background layer drawable (see below).
+  2. In build.gradle: ensure Material Components 1.6+ is used.
+  3. Transport icons: update HistoryAdapter.java bind() to call
+     TransportIconUtil.setIcon(tvTransportIcon, item.transportType)
+     instead of tvTransport.setText(item.transportType).
+  4. Add res/drawable/bg_transport_icon_circle.xml (rounded 44dp background).
+-->
+
+<!-- res/layout/item_route_history.xml -->
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp"
-    app:cardCornerRadius="16dp"
-    app:cardBackgroundColor="@color/surface_card"
-    app:cardElevation="3dp">
+    android:layout_marginHorizontal="4dp"
+    android:layout_marginBottom="14dp">
 
-    <LinearLayout
+    <!-- Glow halo layer (sits behind the card) -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_card_glow"
+        android:alpha="0.55"/>
+
+    <!-- Main card -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_route_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:padding="14dp">
+        app:cardCornerRadius="20dp"
+        app:cardBackgroundColor="@color/surface_card"
+        app:cardElevation="0dp">
 
-        <!-- Transport icon -->
         <LinearLayout
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:background="@drawable/bg_transport_icon"
-            android:gravity="center">
-            <TextView
-                android:id="@+id/tv_history_transport"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="🚌"
-                android:textSize="18sp"/>
-        </LinearLayout>
-
-        <!-- Details -->
-        <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="12dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="16dp">
 
-            <TextView
-                android:id="@+id/tv_history_destination"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:textColor="@color/text_primary"
-                android:fontFamily="@font/poppins_bold"
-                android:maxLines="1"
-                android:ellipsize="end"/>
-
+            <!-- Top row: icon + destination + fav -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="4dp">
+                android:gravity="center_vertical">
+
+                <!-- Transport icon circle -->
+                <FrameLayout
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/bg_transport_icon_circle">
+
+                    <ImageView
+                        android:id="@+id/iv_history_transport"
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_transport_bus"
+                        android:contentDescription="Transport type"/>
+
+                </FrameLayout>
+
+                <!-- Destination + transport label -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="14dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_history_destination"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="@color/text_primary"
+                        android:fontFamily="@font/poppins_bold"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:letterSpacing="0.01"/>
+
+                    <!-- Transport type label (small pill) -->
+                    <TextView
+                        android:id="@+id/tv_history_transport"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/bg_transport_pill"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="2dp"
+                        android:textSize="10sp"
+                        android:textColor="@color/yellow_accent"
+                        android:fontFamily="@font/poppins_regular"
+                        android:letterSpacing="0.06"/>
+
+                </LinearLayout>
+
+                <!-- Fav button -->
+                <ImageButton
+                    android:id="@+id/btn_history_fav"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="4dp"
+                    android:src="@drawable/ic_star_outline"
+                    android:background="@null"
+                    android:contentDescription="Favourite"
+                    android:padding="4dp"/>
+
+            </LinearLayout>
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.8dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/divider_subtle"/>
+
+            <!-- Bottom row: date | distance | fare -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <!-- Calendar icon + date -->
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:src="@drawable/ic_calendar_small"
+                    android:alpha="0.55"
+                    android:contentDescription="@null"/>
 
                 <TextView
                     android:id="@+id/tv_history_date"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="12sp"
+                    android:layout_marginStart="5dp"
+                    android:textSize="11.5sp"
                     android:textColor="@color/text_secondary"/>
 
-                <TextView
-                    android:id="@+id/tv_history_distance"
+                <!-- Distance pill -->
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_secondary"
-                    android:layout_marginStart="8dp"/>
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginEnd="10dp">
+
+                    <ImageView
+                        android:layout_width="13dp"
+                        android:layout_height="13dp"
+                        android:src="@drawable/ic_route_small"
+                        android:alpha="0.5"
+                        android:contentDescription="@null"/>
+
+                    <TextView
+                        android:id="@+id/tv_history_distance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:textSize="11.5sp"
+                        android:textColor="@color/text_secondary"/>
+                </LinearLayout>
+
+                <!-- Fare badge -->
+                <TextView
+                    android:id="@+id/tv_history_fare"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_fare_badge"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="4dp"
+                    android:textSize="12.5sp"
+                    android:textColor="@color/bg_dark"
+                    android:fontFamily="@font/poppins_bold"/>
+
             </LinearLayout>
+
         </LinearLayout>
-
-        <!-- Fare + Fav -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="end"
-            android:layout_marginStart="8dp">
-
-            <TextView
-                android:id="@+id/tv_history_fare"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/yellow_accent"
-                android:fontFamily="@font/poppins_bold"/>
-
-            <ImageButton
-                android:id="@+id/btn_history_fav"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:layout_marginTop="4dp"
-                android:layout_gravity="end"
-                android:src="@drawable/ic_star_outline"
-                android:background="@null"
-                android:contentDescription="Favourite"/>
-        </LinearLayout>
-
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
+</FrameLayout>

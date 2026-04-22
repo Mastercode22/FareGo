@@ -4,7 +4,9 @@ package com.farego.app.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,10 +20,16 @@ import java.lang.String;
 
 public final class ItemRouteHistoryBinding implements ViewBinding {
   @NonNull
-  private final CardView rootView;
+  private final FrameLayout rootView;
 
   @NonNull
   public final ImageButton btnHistoryFav;
+
+  @NonNull
+  public final CardView cardRouteItem;
+
+  @NonNull
+  public final ImageView ivHistoryTransport;
 
   @NonNull
   public final TextView tvHistoryDate;
@@ -38,12 +46,15 @@ public final class ItemRouteHistoryBinding implements ViewBinding {
   @NonNull
   public final TextView tvHistoryTransport;
 
-  private ItemRouteHistoryBinding(@NonNull CardView rootView, @NonNull ImageButton btnHistoryFav,
+  private ItemRouteHistoryBinding(@NonNull FrameLayout rootView, @NonNull ImageButton btnHistoryFav,
+      @NonNull CardView cardRouteItem, @NonNull ImageView ivHistoryTransport,
       @NonNull TextView tvHistoryDate, @NonNull TextView tvHistoryDestination,
       @NonNull TextView tvHistoryDistance, @NonNull TextView tvHistoryFare,
       @NonNull TextView tvHistoryTransport) {
     this.rootView = rootView;
     this.btnHistoryFav = btnHistoryFav;
+    this.cardRouteItem = cardRouteItem;
+    this.ivHistoryTransport = ivHistoryTransport;
     this.tvHistoryDate = tvHistoryDate;
     this.tvHistoryDestination = tvHistoryDestination;
     this.tvHistoryDistance = tvHistoryDistance;
@@ -53,7 +64,7 @@ public final class ItemRouteHistoryBinding implements ViewBinding {
 
   @Override
   @NonNull
-  public CardView getRoot() {
+  public FrameLayout getRoot() {
     return rootView;
   }
 
@@ -81,6 +92,18 @@ public final class ItemRouteHistoryBinding implements ViewBinding {
       id = R.id.btn_history_fav;
       ImageButton btnHistoryFav = ViewBindings.findChildViewById(rootView, id);
       if (btnHistoryFav == null) {
+        break missingId;
+      }
+
+      id = R.id.card_route_item;
+      CardView cardRouteItem = ViewBindings.findChildViewById(rootView, id);
+      if (cardRouteItem == null) {
+        break missingId;
+      }
+
+      id = R.id.iv_history_transport;
+      ImageView ivHistoryTransport = ViewBindings.findChildViewById(rootView, id);
+      if (ivHistoryTransport == null) {
         break missingId;
       }
 
@@ -114,8 +137,9 @@ public final class ItemRouteHistoryBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ItemRouteHistoryBinding((CardView) rootView, btnHistoryFav, tvHistoryDate,
-          tvHistoryDestination, tvHistoryDistance, tvHistoryFare, tvHistoryTransport);
+      return new ItemRouteHistoryBinding((FrameLayout) rootView, btnHistoryFav, cardRouteItem,
+          ivHistoryTransport, tvHistoryDate, tvHistoryDestination, tvHistoryDistance, tvHistoryFare,
+          tvHistoryTransport);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

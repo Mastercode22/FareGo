@@ -28,4 +28,11 @@
     <!-- Route polyline -->
     <color name="route_blue">#2196F3</color>
     <color name="route_blue_glow">#804FC3F7</color>
+
+
+    <color name="glow_yellow">#33FFCA28</color>
+    <color name="transport_icon_bg">#1FFFCA28</color>
+    <color name="transport_icon_border">#40FFCA28</color>
+    <color name="divider_subtle">#1AFFFFFF</color>
+    <color name="text_tertiary">#66FFFFFF</color>
 </resources>

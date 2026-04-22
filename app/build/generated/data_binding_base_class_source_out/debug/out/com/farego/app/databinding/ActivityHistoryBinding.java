@@ -29,17 +29,26 @@ public final class ActivityHistoryBinding implements ViewBinding {
   public final ImageButton btnHistoryBack;
 
   @NonNull
+  public final TextView chipFavourites;
+
+  @NonNull
+  public final LinearLayout layoutHistoryEmpty;
+
+  @NonNull
   public final RecyclerView rvHistory;
 
   @NonNull
   public final TextView tvHistoryEmpty;
 
   private ActivityHistoryBinding(@NonNull LinearLayout rootView, @NonNull Button btnClearHistory,
-      @NonNull ImageButton btnHistoryBack, @NonNull RecyclerView rvHistory,
+      @NonNull ImageButton btnHistoryBack, @NonNull TextView chipFavourites,
+      @NonNull LinearLayout layoutHistoryEmpty, @NonNull RecyclerView rvHistory,
       @NonNull TextView tvHistoryEmpty) {
     this.rootView = rootView;
     this.btnClearHistory = btnClearHistory;
     this.btnHistoryBack = btnHistoryBack;
+    this.chipFavourites = chipFavourites;
+    this.layoutHistoryEmpty = layoutHistoryEmpty;
     this.rvHistory = rvHistory;
     this.tvHistoryEmpty = tvHistoryEmpty;
   }
@@ -83,6 +92,18 @@ public final class ActivityHistoryBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.chip_favourites;
+      TextView chipFavourites = ViewBindings.findChildViewById(rootView, id);
+      if (chipFavourites == null) {
+        break missingId;
+      }
+
+      id = R.id.layout_history_empty;
+      LinearLayout layoutHistoryEmpty = ViewBindings.findChildViewById(rootView, id);
+      if (layoutHistoryEmpty == null) {
+        break missingId;
+      }
+
       id = R.id.rv_history;
       RecyclerView rvHistory = ViewBindings.findChildViewById(rootView, id);
       if (rvHistory == null) {
@@ -96,7 +117,7 @@ public final class ActivityHistoryBinding implements ViewBinding {
       }
 
       return new ActivityHistoryBinding((LinearLayout) rootView, btnClearHistory, btnHistoryBack,
-          rvHistory, tvHistoryEmpty);
+          chipFavourites, layoutHistoryEmpty, rvHistory, tvHistoryEmpty);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));
