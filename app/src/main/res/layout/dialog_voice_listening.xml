@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  dialog_voice_listening.xml
+  Transparent overlay dialog shown while the mic is active.
+
+  Structure:
+    FrameLayout (transparent root)
+      └── CardView (dark pill card, centered)
+            ├── FrameLayout (ring stack + mic icon)
+            │     ├── View  ring_3  (outermost pulse ring)
+            │     ├── View  ring_2
+            │     ├── View  ring_1  (innermost pulse ring)
+            │     └── ImageView  iv_mic_icon
+            ├── TextView  tv_voice_status   ("Listening…")
+            └── TextView  tv_voice_partial  (partial transcription)
+
+  Colors used:
+    #1A1C22  — card background (matches FareGo dark theme)
+    #F5C518  — FareGo yellow accent (mic tint + ring color)
+    #FFFFFF  — primary text
+    #9E9E9E  — secondary text
+-->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#99000000"
+    android:gravity="center">
+
+    <!-- Card container -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:cardCornerRadius="24dp"
+        app:cardBackgroundColor="#1A1C22"
+        app:cardElevation="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:paddingTop="32dp"
+            android:paddingBottom="28dp"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp">
+
+            <!-- Mic + pulse rings stack -->
+            <FrameLayout
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginBottom="20dp">
+
+                <!-- Ring 3 — outermost -->
+                <View
+                    android:id="@+id/ring_3"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:alpha="0"
+                    android:background="@drawable/bg_voice_ring" />
+
+                <!-- Ring 2 -->
+                <View
+                    android:id="@+id/ring_2"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:alpha="0"
+                    android:background="@drawable/bg_voice_ring" />
+
+                <!-- Ring 1 — innermost -->
+                <View
+                    android:id="@+id/ring_1"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:alpha="0"
+                    android:background="@drawable/bg_voice_ring" />
+
+                <!-- Mic icon circle -->
+                <FrameLayout
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_mic_circle">
+
+                    <ImageView
+                        android:id="@+id/iv_mic_icon"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_mic"
+                        android:tint="#F5C518"
+                        android:contentDescription="Microphone" />
+                </FrameLayout>
+            </FrameLayout>
+
+            <!-- Status label -->
+            <TextView
+                android:id="@+id/tv_voice_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Listening…"
+                android:textColor="#FFFFFF"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:letterSpacing="0.03"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Partial result preview -->
+            <TextView
+                android:id="@+id/tv_voice_partial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="#9E9E9E"
+                android:textSize="13sp"
+                android:gravity="center"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:minHeight="20dp" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</FrameLayout>

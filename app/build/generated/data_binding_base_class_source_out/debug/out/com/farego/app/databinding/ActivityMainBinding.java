@@ -4,6 +4,8 @@ package com.farego.app.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -28,10 +30,16 @@ public final class ActivityMainBinding implements ViewBinding {
   public final BottomNavigationView bottomNav;
 
   @NonNull
+  public final ImageButton btnMic;
+
+  @NonNull
   public final CardView cardSearch;
 
   @NonNull
   public final CardView cardTripInfo;
+
+  @NonNull
+  public final EditText etDestination;
 
   @NonNull
   public final FloatingActionButton fabMyLocation;
@@ -41,9 +49,6 @@ public final class ActivityMainBinding implements ViewBinding {
 
   @NonNull
   public final ProgressBar pbRouteLoading;
-
-  @NonNull
-  public final TextView tvDestination;
 
   @NonNull
   public final TextView tvDistance;
@@ -61,19 +66,21 @@ public final class ActivityMainBinding implements ViewBinding {
   public final TextView tvTrafficBadge;
 
   private ActivityMainBinding(@NonNull CoordinatorLayout rootView,
-      @NonNull BottomNavigationView bottomNav, @NonNull CardView cardSearch,
-      @NonNull CardView cardTripInfo, @NonNull FloatingActionButton fabMyLocation,
+      @NonNull BottomNavigationView bottomNav, @NonNull ImageButton btnMic,
+      @NonNull CardView cardSearch, @NonNull CardView cardTripInfo, @NonNull EditText etDestination,
+      @NonNull FloatingActionButton fabMyLocation,
       @NonNull ExtendedFloatingActionButton fabStartTrip, @NonNull ProgressBar pbRouteLoading,
-      @NonNull TextView tvDestination, @NonNull TextView tvDistance, @NonNull TextView tvEta,
-      @NonNull TextView tvFare, @NonNull TextView tvOrigin, @NonNull TextView tvTrafficBadge) {
+      @NonNull TextView tvDistance, @NonNull TextView tvEta, @NonNull TextView tvFare,
+      @NonNull TextView tvOrigin, @NonNull TextView tvTrafficBadge) {
     this.rootView = rootView;
     this.bottomNav = bottomNav;
+    this.btnMic = btnMic;
     this.cardSearch = cardSearch;
     this.cardTripInfo = cardTripInfo;
+    this.etDestination = etDestination;
     this.fabMyLocation = fabMyLocation;
     this.fabStartTrip = fabStartTrip;
     this.pbRouteLoading = pbRouteLoading;
-    this.tvDestination = tvDestination;
     this.tvDistance = tvDistance;
     this.tvEta = tvEta;
     this.tvFare = tvFare;
@@ -114,6 +121,12 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.btn_mic;
+      ImageButton btnMic = ViewBindings.findChildViewById(rootView, id);
+      if (btnMic == null) {
+        break missingId;
+      }
+
       id = R.id.card_search;
       CardView cardSearch = ViewBindings.findChildViewById(rootView, id);
       if (cardSearch == null) {
@@ -123,6 +136,12 @@ public final class ActivityMainBinding implements ViewBinding {
       id = R.id.card_trip_info;
       CardView cardTripInfo = ViewBindings.findChildViewById(rootView, id);
       if (cardTripInfo == null) {
+        break missingId;
+      }
+
+      id = R.id.et_destination;
+      EditText etDestination = ViewBindings.findChildViewById(rootView, id);
+      if (etDestination == null) {
         break missingId;
       }
 
@@ -141,12 +160,6 @@ public final class ActivityMainBinding implements ViewBinding {
       id = R.id.pb_route_loading;
       ProgressBar pbRouteLoading = ViewBindings.findChildViewById(rootView, id);
       if (pbRouteLoading == null) {
-        break missingId;
-      }
-
-      id = R.id.tv_destination;
-      TextView tvDestination = ViewBindings.findChildViewById(rootView, id);
-      if (tvDestination == null) {
         break missingId;
       }
 
@@ -180,8 +193,8 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityMainBinding((CoordinatorLayout) rootView, bottomNav, cardSearch,
-          cardTripInfo, fabMyLocation, fabStartTrip, pbRouteLoading, tvDestination, tvDistance,
+      return new ActivityMainBinding((CoordinatorLayout) rootView, bottomNav, btnMic, cardSearch,
+          cardTripInfo, etDestination, fabMyLocation, fabStartTrip, pbRouteLoading, tvDistance,
           tvEta, tvFare, tvOrigin, tvTrafficBadge);
     }
     String missingId = rootView.getResources().getResourceName(id);

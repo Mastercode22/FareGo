@@ -3440,9 +3440,11 @@ drawable bg_card_glow
 drawable bg_chip_outline_yellow
 drawable bg_fare_badge
 drawable bg_icon_button
+drawable bg_mic_circle
 drawable bg_transport_icon
 drawable bg_transport_icon_circle
 drawable bg_transport_pill
+drawable bg_voice_ring
 drawable btn_checkbox_checked_mtrl
 drawable btn_checkbox_checked_to_unchecked_mtrl_animation
 drawable btn_checkbox_unchecked_mtrl
@@ -3498,6 +3500,7 @@ drawable ic_m3_chip_check
 drawable ic_m3_chip_checked_circle
 drawable ic_m3_chip_close
 drawable ic_map
+drawable ic_mic
 drawable ic_mtrl_checked_circle
 drawable ic_mtrl_chip_checked_black
 drawable ic_mtrl_chip_checked_circle
@@ -3510,6 +3513,7 @@ drawable ic_onboard_map
 drawable ic_profile
 drawable ic_profile_placeholder
 drawable ic_route_small
+drawable ic_search
 drawable ic_search_black_24
 drawable ic_star_filled
 drawable ic_star_outline
@@ -3710,9 +3714,11 @@ id btn_detail_back
 id btn_history_back
 id btn_history_fav
 id btn_logout
+id btn_mic
 id btn_onboarding_next
 id btn_reuse_route
 id btn_save_home
+id btn_save_location
 id btn_save_profile
 id btn_save_work
 id buttonPanel
@@ -3807,7 +3813,9 @@ id endToStart
 id enterAlways
 id enterAlwaysCollapsed
 id et_confirm_password
+id et_destination
 id et_email
+id et_location_search
 id et_name
 id et_password
 id et_phone
@@ -3871,6 +3879,7 @@ id item_touch_helper_previous_elevation
 id iv_auth_logo
 id iv_avatar
 id iv_history_transport
+id iv_mic_icon
 id iv_onboard_image
 id iv_splash_logo
 id jumpToEnd
@@ -3999,6 +4008,7 @@ id parent_matrix
 id password_toggle
 id path
 id pathRelative
+id pb_geocoding
 id pb_route_loading
 id pb_saving
 id peekHeight
@@ -4039,6 +4049,9 @@ id right
 id rightToLeft
 id right_icon
 id right_side
+id ring_1
+id ring_2
+id ring_3
 id rounded
 id row_confirm_password
 id row_email
@@ -4150,6 +4163,7 @@ id titleDividerNoCustom
 id title_template
 id toggle
 id toolbar_profile
+id toolbar_select_location
 id top
 id topPanel
 id touch_outside
@@ -4162,7 +4176,6 @@ id transition_scene_layoutid_cache
 id transition_transform
 id triangle
 id tv_auth_title
-id tv_destination
 id tv_detail_date
 id tv_detail_distance
 id tv_detail_duration
@@ -4188,6 +4201,7 @@ id tv_onboarding_skip
 id tv_origin
 id tv_profile_email
 id tv_profile_username
+id tv_selected_address
 id tv_splash_tagline
 id tv_splash_title
 id tv_taxi_badge
@@ -4199,6 +4213,8 @@ id tv_trotro_badge
 id tv_trotro_fare
 id tv_uber_badge
 id tv_uber_fare
+id tv_voice_partial
+id tv_voice_status
 id tv_work_saved
 id unchecked
 id uniform
@@ -4345,6 +4361,7 @@ layout activity_history
 layout activity_main
 layout activity_onboarding
 layout activity_profile
+layout activity_select_location
 layout activity_splash
 layout activity_trip_detail
 layout bottom_sheet_transport
@@ -4364,6 +4381,7 @@ layout design_navigation_menu
 layout design_navigation_menu_item
 layout design_text_input_end_icon
 layout design_text_input_start_icon
+layout dialog_voice_listening
 layout ime_base_split_test_activity
 layout ime_secondary_split_test_activity
 layout item_onboarding_page

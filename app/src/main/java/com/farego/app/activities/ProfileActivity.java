@@ -23,6 +23,7 @@ import com.farego.app.db.AppDatabase;
 import com.farego.app.db.entity.User;
 import com.farego.app.db.entity.UserProfile;
 import com.farego.app.utils.ImageUtils;
+import com.farego.app.utils.LocationStorageHelper;
 import com.farego.app.utils.SessionManager;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
@@ -33,23 +34,22 @@ import java.io.InputStream;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private ImageView ivAvatar;
+    private ImageView         ivAvatar;
     private TextInputEditText etName, etEmail, etPhone;
-    private Button btnSave, btnLogout;
-    private ProgressBar pbSaving;
-    private MaterialToolbar toolbar;
+    private Button            btnSave, btnLogout;
+    private ProgressBar       pbSaving;
+    private MaterialToolbar   toolbar;
 
-    // Stats views (declared in activity_profile.xml)
+    // Stats
     private TextView tvTripCount, tvTotalKm, tvFavTransport;
 
     // Saved-location labels
     private TextView tvHomeSaved, tvWorkSaved;
-    private Button btnSaveHome, btnSaveWork;
+    private Button   btnSaveHome, btnSaveWork;
 
     private SessionManager session;
-    private AppDatabase db;
-
-    private Uri cameraUri;
+    private AppDatabase    db;
+    private Uri            cameraUri;
 
     // ── Activity result launchers ──────────────────────────────────────────────
 
@@ -66,6 +66,39 @@ public class ProfileActivity extends AppCompatActivity {
                 if (result.getResultCode() == RESULT_OK && cameraUri != null) {
                     handleImageUri(cameraUri);
                 }
+            });
+
+    /** Launcher for SelectLocationActivity — handles both HOME and WORK results */
+    private final ActivityResultLauncher<Intent> locationLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() != RESULT_OK || result.getData() == null) return;
+
+                Intent data    = result.getData();
+                String type    = data.getStringExtra(SelectLocationActivity.RESULT_TYPE);
+                String address = data.getStringExtra(SelectLocationActivity.RESULT_ADDRESS);
+                double lat     = data.getDoubleExtra(SelectLocationActivity.RESULT_LAT, 0);
+                double lng     = data.getDoubleExtra(SelectLocationActivity.RESULT_LNG, 0);
+
+                if (address == null) return;
+
+                // Update UI immediately
+                if ("HOME".equals(type) && tvHomeSaved != null) tvHomeSaved.setText(address);
+                if ("WORK".equals(type) && tvWorkSaved != null) tvWorkSaved.setText(address);
+
+                // Persist into Room UserProfile so it survives reinstalls / wipes
+                int userId = session.getUserId();
+                AppDatabase.DB_EXECUTOR.execute(() -> {
+                    UserProfile profile = db.userProfileDao().getByUserId(userId);
+                    if (profile == null) {
+                        profile        = new UserProfile();
+                        profile.userId = userId;
+                        User user = db.userDao().findById(userId);
+                        if (user != null) { profile.name = user.username; profile.email = user.email; }
+                    }
+                    if ("HOME".equals(type)) profile.homeLocation = address;
+                    else                      profile.workLocation = address;
+                    db.userProfileDao().upsert(profile);
+                });
             });
 
     // ── Lifecycle ──────────────────────────────────────────────────────────────
@@ -88,39 +121,49 @@ public class ProfileActivity extends AppCompatActivity {
         if (btnLogout != null) {
             btnLogout.setOnClickListener(v -> {
                 session.clearSession();
-                // Navigate back to auth screen
                 Intent intent = new Intent(this, AuthActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             });
         }
 
-        if (btnSaveHome != null) btnSaveHome.setOnClickListener(v -> showLocationDialog("Home"));
-        if (btnSaveWork != null) btnSaveWork.setOnClickListener(v -> showLocationDialog("Work"));
+        // ── Saved location buttons: open map picker ────────────────────────────
+        if (btnSaveHome != null) {
+            btnSaveHome.setOnClickListener(v -> openLocationPicker("HOME"));
+        }
+        if (btnSaveWork != null) {
+            btnSaveWork.setOnClickListener(v -> openLocationPicker("WORK"));
+        }
+    }
+
+    // ── Open map picker ────────────────────────────────────────────────────────
+
+    private void openLocationPicker(String type) {
+        Intent intent = new Intent(this, SelectLocationActivity.class);
+        intent.putExtra(SelectLocationActivity.EXTRA_TYPE, type);
+        locationLauncher.launch(intent);
     }
 
     // ── View binding ───────────────────────────────────────────────────────────
 
     private void bindViews() {
-        toolbar         = findViewById(R.id.toolbar_profile);
-        ivAvatar        = findViewById(R.id.iv_avatar);
-        etName          = findViewById(R.id.et_name);
-        etEmail         = findViewById(R.id.et_email);
-        etPhone         = findViewById(R.id.et_phone);
-        btnSave         = findViewById(R.id.btn_save_profile);
-        btnLogout       = findViewById(R.id.btn_logout);
-        pbSaving        = findViewById(R.id.pb_saving);
+        toolbar        = findViewById(R.id.toolbar_profile);
+        ivAvatar       = findViewById(R.id.iv_avatar);
+        etName         = findViewById(R.id.et_name);
+        etEmail        = findViewById(R.id.et_email);
+        etPhone        = findViewById(R.id.et_phone);
+        btnSave        = findViewById(R.id.btn_save_profile);
+        btnLogout      = findViewById(R.id.btn_logout);
+        pbSaving       = findViewById(R.id.pb_saving);
 
-        // Stats
-        tvTripCount     = findViewById(R.id.tv_trip_count);
-        tvTotalKm       = findViewById(R.id.tv_total_km);
-        tvFavTransport  = findViewById(R.id.tv_fav_transport);
+        tvTripCount    = findViewById(R.id.tv_trip_count);
+        tvTotalKm      = findViewById(R.id.tv_total_km);
+        tvFavTransport = findViewById(R.id.tv_fav_transport);
 
-        // Saved locations
-        tvHomeSaved     = findViewById(R.id.tv_home_saved);
-        tvWorkSaved     = findViewById(R.id.tv_work_saved);
-        btnSaveHome     = findViewById(R.id.btn_save_home);
-        btnSaveWork     = findViewById(R.id.btn_save_work);
+        tvHomeSaved    = findViewById(R.id.tv_home_saved);
+        tvWorkSaved    = findViewById(R.id.tv_work_saved);
+        btnSaveHome    = findViewById(R.id.btn_save_home);
+        btnSaveWork    = findViewById(R.id.btn_save_work);
     }
 
     private void setupToolbar() {
@@ -136,56 +179,66 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void loadProfile() {
         int userId = session.getUserId();
-
         if (userId == -1) {
             Toast.makeText(this, "Please log in first.", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
-        AppDatabase.DB_EXECUTOR.execute(() -> {
-            User        user       = db.userDao().findById(userId);
-            UserProfile profile    = db.userProfileDao().getByUserId(userId);
+        // Load saved locations from SharedPreferences immediately (fast, no DB needed)
+        String homeAddr = LocationStorageHelper.getDisplayAddress(this, "HOME");
+        String workAddr = LocationStorageHelper.getDisplayAddress(this, "WORK");
+        if (tvHomeSaved != null) tvHomeSaved.setText(homeAddr);
+        if (tvWorkSaved != null) tvWorkSaved.setText(workAddr);
 
-            // Stats
-            int    tripCount   = db.routeHistoryDao().countForUser(userId);
-            double totalKm     = db.routeHistoryDao().totalKmForUser(userId);
-            String favTransport = db.routeHistoryDao().favTransportForUser(userId);
+        AppDatabase.DB_EXECUTOR.execute(() -> {
+            User        user        = db.userDao().findById(userId);
+            UserProfile profile     = db.userProfileDao().getByUserId(userId);
+            int         tripCount   = db.routeHistoryDao().countForUser(userId);
+            double      totalKm     = db.routeHistoryDao().totalKmForUser(userId);
+            String      favTransport = db.routeHistoryDao().favTransportForUser(userId);
 
             runOnUiThread(() -> {
                 if (user == null) {
-                    Toast.makeText(this,
-                            "Session expired. Please log in again.",
+                    Toast.makeText(this, "Session expired. Please log in again.",
                             Toast.LENGTH_SHORT).show();
                     finish();
                     return;
                 }
 
-                // ── Profile fields ──
+                // Stats
+                if (tvTripCount    != null) tvTripCount.setText(String.valueOf(tripCount));
+                if (tvTotalKm      != null) tvTotalKm.setText(String.format("%.1f km", totalKm));
+                if (tvFavTransport != null)
+                    tvFavTransport.setText((favTransport != null && !favTransport.isEmpty())
+                            ? favTransport : "—");
+
+                // Profile fields
                 if (profile != null) {
                     setFieldText(etName,  profile.name);
                     setFieldText(etEmail, profile.email != null ? profile.email : user.email);
                     setFieldText(etPhone, profile.phone);
                     loadAvatarFromPath(profile.avatarPath);
 
-                    // Saved locations (stored in profile as homeLocation / workLocation)
-                    if (tvHomeSaved != null)
-                        tvHomeSaved.setText(profile.homeLocation != null
-                                ? profile.homeLocation : "Not set");
-                    if (tvWorkSaved != null)
-                        tvWorkSaved.setText(profile.workLocation != null
-                                ? profile.workLocation : "Not set");
+                    // Saved locations — prefer SharedPreferences (has lat/lng too), fall back to DB
+                    String hAddr = LocationStorageHelper.getDisplayAddress(this, "HOME");
+                    String wAddr = LocationStorageHelper.getDisplayAddress(this, "WORK");
+                    // If SP is "Not set" but DB has data, use DB value
+                    if ("Not set".equals(hAddr) && profile.homeLocation != null)
+                        hAddr = profile.homeLocation;
+                    if ("Not set".equals(wAddr) && profile.workLocation != null)
+                        wAddr = profile.workLocation;
+
+                    if (tvHomeSaved != null) tvHomeSaved.setText(hAddr);
+                    if (tvWorkSaved != null) tvWorkSaved.setText(wAddr);
                 } else {
                     setFieldText(etName,  user.username);
                     setFieldText(etEmail, user.email);
                     setFieldText(etPhone, "");
                     ivAvatar.setImageResource(R.drawable.ic_avatar_placeholder);
-                    if (tvHomeSaved != null) tvHomeSaved.setText("Not set");
-                    if (tvWorkSaved != null) tvWorkSaved.setText("Not set");
                 }
 
-                // Also show username / email in header TextViews if they exist
-                TextView tvUsername = findViewById(R.id.tv_profile_username);
+                TextView tvUsername    = findViewById(R.id.tv_profile_username);
                 TextView tvHeaderEmail = findViewById(R.id.tv_profile_email);
                 if (tvUsername != null)
                     tvUsername.setText(profile != null && profile.name != null
@@ -193,71 +246,45 @@ public class ProfileActivity extends AppCompatActivity {
                 if (tvHeaderEmail != null)
                     tvHeaderEmail.setText(profile != null && profile.email != null
                             ? profile.email : user.email);
-
-                // ── Stats ──
-                if (tvTripCount  != null) tvTripCount.setText(String.valueOf(tripCount));
-                if (tvTotalKm    != null) tvTotalKm.setText(
-                        String.format("%.1f km", totalKm));
-                if (tvFavTransport != null)
-                    tvFavTransport.setText(
-                            (favTransport == null || favTransport.isEmpty()) ? "—"
-                                    : formatTransport(favTransport));
             });
         });
     }
 
-    /** Convert DB enum name ("TROTRO") to display label ("TroTro"). */
-    private String formatTransport(String raw) {
-        if (raw == null) return "—";
-        switch (raw.toUpperCase()) {
-            case "TROTRO": return "TroTro";
-            case "TAXI":   return "Taxi";
-            case "UBER":   return "Uber";
-            default:       return raw;
-        }
+    // ── Helper ────────────────────────────────────────────────────────────────
+
+    private void setFieldText(TextInputEditText field, String value) {
+        if (field != null && value != null) field.setText(value);
     }
 
-    // ── Safe field helper ──────────────────────────────────────────────────────
-
-    private void setFieldText(TextInputEditText field, @Nullable String value) {
-        if (field != null) field.setText(value != null ? value : "");
-    }
-
-    // ── Image source dialog ────────────────────────────────────────────────────
+    // ── Image picker ───────────────────────────────────────────────────────────
 
     private void showImageSourceDialog() {
         new AlertDialog.Builder(this)
-                .setTitle("Change Profile Picture")
-                .setItems(new String[]{"Take Photo", "Choose from Gallery", "Remove Photo"},
-                        (dialog, which) -> {
-                            if      (which == 0) launchCamera();
-                            else if (which == 1) launchGallery();
+                .setTitle("Change Profile Photo")
+                .setItems(new String[]{"Choose from Gallery", "Take a Photo", "Remove Photo"},
+                        (d, which) -> {
+                            if      (which == 0) openGallery();
+                            else if (which == 1) openCamera();
                             else                 removeAvatar();
                         })
                 .show();
     }
 
-    private void launchGallery() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        galleryLauncher.launch(Intent.createChooser(intent, "Select Picture"));
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        galleryLauncher.launch(intent);
     }
 
-    private void launchCamera() {
+    private void openCamera() {
         try {
-            File photoFile = ImageUtils.createTempImageFile(this);
-            cameraUri = FileProvider.getUriForFile(
-                    this,
-                    getPackageName() + ".fileprovider",
-                    photoFile);
+            File imageFile = ImageUtils.createTempImageFile(this);
+            cameraUri = FileProvider.getUriForFile(this,
+                    getPackageName() + ".provider", imageFile);
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, cameraUri);
-            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             cameraLauncher.launch(intent);
         } catch (IOException e) {
-            Toast.makeText(this,
-                    "Cannot open camera: " + e.getMessage(),
+            Toast.makeText(this, "Cannot open camera: " + e.getMessage(),
                     Toast.LENGTH_SHORT).show();
         }
     }
@@ -271,10 +298,8 @@ public class ProfileActivity extends AppCompatActivity {
                 try (InputStream probe = getContentResolver().openInputStream(uri)) {
                     BitmapFactory.decodeStream(probe, null, opts);
                 }
-
                 opts.inSampleSize       = ImageUtils.calculateInSampleSize(opts, 512, 512);
                 opts.inJustDecodeBounds = false;
-
                 Bitmap bitmap;
                 try (InputStream stream = getContentResolver().openInputStream(uri)) {
                     bitmap = BitmapFactory.decodeStream(stream, null, opts);
@@ -288,10 +313,7 @@ public class ProfileActivity extends AppCompatActivity {
                     profile        = new UserProfile();
                     profile.userId = session.getUserId();
                     User user = db.userDao().findById(session.getUserId());
-                    if (user != null) {
-                        profile.name  = user.username;
-                        profile.email = user.email;
-                    }
+                    if (user != null) { profile.name = user.username; profile.email = user.email; }
                 }
                 profile.avatarPath = savedPath;
                 db.userProfileDao().upsert(profile);
@@ -305,8 +327,7 @@ public class ProfileActivity extends AppCompatActivity {
             } catch (Exception e) {
                 runOnUiThread(() -> {
                     pbSaving.setVisibility(View.GONE);
-                    Toast.makeText(this,
-                            "Could not save image. Please try again.",
+                    Toast.makeText(this, "Could not save image. Please try again.",
                             Toast.LENGTH_LONG).show();
                 });
             }
@@ -330,72 +351,12 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void loadAvatarFromPath(@Nullable String path) {
         if (path != null && new File(path).exists()) {
-            Glide.with(this)
-                    .load(new File(path))
-                    .transform(new CircleCrop())
+            Glide.with(this).load(new File(path)).transform(new CircleCrop())
                     .placeholder(R.drawable.ic_avatar_placeholder)
-                    .error(R.drawable.ic_avatar_placeholder)
-                    .into(ivAvatar);
+                    .error(R.drawable.ic_avatar_placeholder).into(ivAvatar);
         } else {
             ivAvatar.setImageResource(R.drawable.ic_avatar_placeholder);
         }
-    }
-
-    // ── Saved location dialog ──────────────────────────────────────────────────
-    // Uses a simple text-input dialog so no Places SDK is needed here and no
-    // onActivityResult collision can occur.
-
-    private void showLocationDialog(String type) {
-        android.widget.EditText input = new android.widget.EditText(this);
-        input.setHint("Enter " + type + " address");
-        input.setPadding(48, 24, 48, 24);
-
-        // Pre-fill current saved value
-        AppDatabase.DB_EXECUTOR.execute(() -> {
-            UserProfile profile = db.userProfileDao().getByUserId(session.getUserId());
-            runOnUiThread(() -> {
-                if (profile != null) {
-                    if ("Home".equals(type) && profile.homeLocation != null)
-                        input.setText(profile.homeLocation);
-                    else if ("Work".equals(type) && profile.workLocation != null)
-                        input.setText(profile.workLocation);
-                }
-            });
-        });
-
-        new AlertDialog.Builder(this)
-                .setTitle("Set " + type + " Location")
-                .setView(input)
-                .setPositiveButton("Save", (d, w) -> {
-                    String address = input.getText().toString().trim();
-                    if (address.isEmpty()) return;
-                    AppDatabase.DB_EXECUTOR.execute(() -> {
-                        UserProfile profile = db.userProfileDao().getByUserId(session.getUserId());
-                        if (profile == null) {
-                            profile        = new UserProfile();
-                            profile.userId = session.getUserId();
-                            User user = db.userDao().findById(session.getUserId());
-                            if (user != null) {
-                                profile.name  = user.username;
-                                profile.email = user.email;
-                            }
-                        }
-                        if ("Home".equals(type)) profile.homeLocation = address;
-                        else                      profile.workLocation = address;
-                        db.userProfileDao().upsert(profile);
-
-                        runOnUiThread(() -> {
-                            if ("Home".equals(type) && tvHomeSaved != null)
-                                tvHomeSaved.setText(address);
-                            else if (tvWorkSaved != null)
-                                tvWorkSaved.setText(address);
-                            Toast.makeText(this,
-                                    type + " location saved!", Toast.LENGTH_SHORT).show();
-                        });
-                    });
-                })
-                .setNegativeButton("Cancel", null)
-                .show();
     }
 
     // ── Save profile ───────────────────────────────────────────────────────────
@@ -418,7 +379,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         AppDatabase.DB_EXECUTOR.execute(() -> {
             int userId = session.getUserId();
-
             UserProfile profile = db.userProfileDao().getByUserId(userId);
             if (profile == null) {
                 profile        = new UserProfile();
@@ -427,7 +387,7 @@ public class ProfileActivity extends AppCompatActivity {
             profile.name  = name;
             profile.email = email;
             profile.phone = phone;
-            // avatarPath, homeLocation, workLocation are NOT touched here
+            // avatarPath, homeLocation, workLocation NOT touched here
             db.userProfileDao().upsert(profile);
 
             User user = db.userDao().findById(userId);

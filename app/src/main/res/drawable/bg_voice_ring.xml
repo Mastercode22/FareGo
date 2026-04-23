@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/drawable/bg_voice_ring.xml -->
+<!-- Semi-transparent yellow oval — scaled and faded by the pulse animator -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="#33F5C518" />
+    <!-- #33 = ~20% alpha; the animator drives alpha from 0.8 → 0 -->
+</shape>

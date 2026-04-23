@@ -4,16 +4,16 @@
         "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\activity_trip_detail.xml"
     },
     {
-        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-mergeDebugResources-42:\\layout\\activity_splash.xml",
-        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\activity_splash.xml"
-    },
-    {
-        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-mergeDebugResources-42:\\layout\\activity_auth.xml",
-        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\activity_auth.xml"
+        "merged": "com.farego.app-mergeDebugResources-42:/layout/activity_select_location.xml",
+        "source": "com.farego.app-main-45:/layout/activity_select_location.xml"
     },
     {
         "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-mergeDebugResources-42:\\layout\\item_route_history.xml",
         "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\item_route_history.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-mergeDebugResources-42:\\layout\\dialog_voice_listening.xml",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\dialog_voice_listening.xml"
     },
     {
         "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-mergeDebugResources-42:\\layout\\activity_onboarding.xml",
@@ -24,23 +24,27 @@
         "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\item_onboarding_page.xml"
     },
     {
-        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-mergeDebugResources-42:\\layout\\activity_history.xml",
-        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\activity_history.xml"
-    },
-    {
-        "merged": "com.farego.app-mergeDebugResources-42:/layout/item_route_history.xml",
-        "source": "com.farego.app-main-45:/layout/item_route_history.xml"
-    },
-    {
-        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-mergeDebugResources-42:\\layout\\bottom_sheet_transport.xml",
-        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\bottom_sheet_transport.xml"
-    },
-    {
         "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-mergeDebugResources-42:\\layout\\activity_main.xml",
         "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\activity_main.xml"
     },
     {
         "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-mergeDebugResources-42:\\layout\\activity_profile.xml",
         "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\activity_profile.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-mergeDebugResources-42:\\layout\\activity_splash.xml",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\activity_splash.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-mergeDebugResources-42:\\layout\\activity_auth.xml",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\activity_auth.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-mergeDebugResources-42:\\layout\\activity_history.xml",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\activity_history.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-mergeDebugResources-42:\\layout\\bottom_sheet_transport.xml",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\bottom_sheet_transport.xml"
     }
 ]

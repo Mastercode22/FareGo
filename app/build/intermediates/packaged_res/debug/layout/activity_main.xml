@@ -24,7 +24,9 @@
         android:indeterminateTint="@color/yellow_accent"
         android:visibility="gone"/>
 
-    <!-- ── Top search panel ── -->
+    <!-- ═══════════════════════════════════════════════════════════════
+         Top search panel
+         ═══════════════════════════════════════════════════════════════ -->
     <androidx.cardview.widget.CardView
         android:id="@+id/card_search"
         android:layout_width="match_parent"
@@ -42,7 +44,7 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Origin row -->
+            <!-- ── Origin row ── -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -68,44 +70,77 @@
                     android:ellipsize="end"/>
             </LinearLayout>
 
+            <!-- Divider -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginVertical="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:background="@color/divider"/>
 
-            <!-- Destination row -->
-            <LinearLayout
+            <!-- ── Destination row ── -->
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:layout_height="wrap_content">
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_location_pin_yellow"
-                    android:contentDescription="Destination"/>
-
-                <TextView
-                    android:id="@+id/tv_destination"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="12dp"
-                    android:text="Where to?"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="14sp"
-                    android:maxLines="1"
-                    android:ellipsize="end"/>
-            </LinearLayout>
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_location_pin_yellow"
+                        android:contentDescription="Destination"/>
+
+                    <!-- showSoftInputOnFocus removed from XML; set in code -->
+                    <EditText
+                        android:id="@+id/et_destination"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="12dp"
+                        android:background="@null"
+                        android:hint="Where to?"
+                        android:textColorHint="@color/text_secondary"
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:imeOptions="actionSearch"
+                        android:inputType="textCapWords|textNoSuggestions"
+                        android:paddingEnd="44dp"
+                        android:paddingTop="0dp"
+                        android:paddingBottom="0dp"
+                        android:importantForAutofill="no"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:cursorVisible="false"/>
+
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/btn_mic"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_mic"
+                    android:contentDescription="Voice search"
+                    android:scaleType="centerInside"
+                    android:padding="8dp"
+                    app:tint="@color/yellow_accent"/>
+
+            </FrameLayout>
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- ── Trip info card (shows after route fetched) ── -->
-    <!-- Note: layout_marginBottom is set to 0dp here intentionally.         -->
-    <!-- adjustCardForBottomNav() in MainActivity measures the real nav       -->
-    <!-- height at runtime and sets the correct margin dynamically.           -->
+    <!-- ═══════════════════════════════════════════════════════════════
+         Trip info card (shows after route is fetched)
+         ═══════════════════════════════════════════════════════════════ -->
     <androidx.cardview.widget.CardView
         android:id="@+id/card_trip_info"
         android:layout_width="match_parent"
@@ -237,7 +272,6 @@
     </androidx.cardview.widget.CardView>
 
     <!-- ── FAB My Location ── -->
-    <!-- Note: layout_marginBottom is also set by adjustCardForBottomNav()    -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_my_location"
         android:layout_width="wrap_content"
