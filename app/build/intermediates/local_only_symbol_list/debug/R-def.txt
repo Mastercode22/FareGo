@@ -13,8 +13,10 @@ color orange_moderate
 color red_heavy
 color route_blue
 color route_blue_glow
+color sharp_glow_yellow
 color surface_card
 color surface_dark
+color text_input_stroke
 color text_primary
 color text_secondary
 color text_tertiary
@@ -31,6 +33,8 @@ drawable bg_chip_outline_yellow
 drawable bg_fare_badge
 drawable bg_icon_button
 drawable bg_mic_circle
+drawable bg_sharp_glow
+drawable bg_sharp_glow_card
 drawable bg_transport_icon
 drawable bg_transport_icon_circle
 drawable bg_transport_pill
@@ -202,6 +206,7 @@ style FareGoDialogTheme
 style ShapeAppearance.FareGo.BottomSheet
 style Theme.FareGo
 style Theme.FareGo.Splash
+style YellowHintText
 xml backup_rules
 xml data_extraction_rules
 xml file_provider_paths

@@ -2524,6 +2524,7 @@ color secondary_text_default_material_dark
 color secondary_text_default_material_light
 color secondary_text_disabled_material_dark
 color secondary_text_disabled_material_light
+color sharp_glow_yellow
 color surface_card
 color surface_dark
 color switch_thumb_disabled_material_dark
@@ -2532,6 +2533,7 @@ color switch_thumb_material_dark
 color switch_thumb_material_light
 color switch_thumb_normal_material_dark
 color switch_thumb_normal_material_light
+color text_input_stroke
 color text_primary
 color text_secondary
 color text_tertiary
@@ -3441,6 +3443,8 @@ drawable bg_chip_outline_yellow
 drawable bg_fare_badge
 drawable bg_icon_button
 drawable bg_mic_circle
+drawable bg_sharp_glow
+drawable bg_sharp_glow_card
 drawable bg_transport_icon
 drawable bg_transport_icon_circle
 drawable bg_transport_pill
@@ -5797,6 +5801,7 @@ style Widget_MaterialComponents_Toolbar_PrimarySurface
 style Widget_MaterialComponents_Toolbar_Surface
 style Widget_MaterialComponents_Tooltip
 style Widget_Support_CoordinatorLayout
+style YellowHintText
 styleable ActionBar background backgroundSplit backgroundStacked contentInsetEnd contentInsetEndWithActions contentInsetLeft contentInsetRight contentInsetStart contentInsetStartWithNavigation customNavigationLayout displayOptions divider elevation height hideOnContentScroll homeAsUpIndicator homeLayout icon indeterminateProgressStyle itemPadding logo navigationMode popupTheme progressBarPadding progressBarStyle subtitle subtitleTextStyle title titleTextStyle
 styleable ActionBarLayout android_layout_gravity
 styleable ActionMenuItemView android_minWidth

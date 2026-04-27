@@ -36,6 +36,10 @@
         "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\mipmap-mdpi\\ic_launcher_round.png"
     },
     {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\layout_activity_select_location.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\activity_select_location.xml"
+    },
+    {
         "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_ic_stop.xml.flat",
         "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\ic_stop.xml"
     },
@@ -148,12 +152,16 @@
         "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\ic_onboard_fare.xml"
     },
     {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\color_text_input_stroke.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\color\\text_input_stroke.xml"
+    },
+    {
         "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\mipmap-xhdpi_ic_launcher.png.flat",
         "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\mipmap-xhdpi\\ic_launcher.png"
     },
     {
-        "merged": "com.farego.app-merged_res-43:/layout_activity_select_location.xml.flat",
-        "source": "com.farego.app-main-45:/layout/activity_select_location.xml"
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_bg_sharp_glow.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\bg_sharp_glow.xml"
     },
     {
         "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_ic_arrow_back.xml.flat",
@@ -162,6 +170,10 @@
     {
         "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\layout_activity_onboarding.xml.flat",
         "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\activity_onboarding.xml"
+    },
+    {
+        "merged": "com.farego.app-merged_res-43:/layout_item_route_history.xml.flat",
+        "source": "com.farego.app-main-45:/layout/item_route_history.xml"
     },
     {
         "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\layout_activity_main.xml.flat",
@@ -212,6 +224,10 @@
         "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\ic_onboard_map.xml"
     },
     {
+        "merged": "com.farego.app-merged_res-43:/drawable_bg_sharp_glow_card.xml.flat",
+        "source": "com.farego.app-main-45:/drawable/bg_sharp_glow_card.xml"
+    },
+    {
         "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_bg_bottom_sheet.xml.flat",
         "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\bg_bottom_sheet.xml"
     },
@@ -248,10 +264,6 @@
         "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\layout\\activity_splash.xml"
     },
     {
-        "merged": "com.farego.app-merged_res-43:/drawable_ic_search.xml.flat",
-        "source": "com.farego.app-main-45:/drawable/ic_search.xml"
-    },
-    {
         "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_tab_indicator_selector.xml.flat",
         "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\tab_indicator_selector.xml"
     },
@@ -262,5 +274,9 @@
     {
         "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_ic_farego_logo.xml.flat",
         "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\ic_farego_logo.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-merged_res-43:\\drawable_ic_search.xml.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.9\\com.farego.app-main-45:\\drawable\\ic_search.xml"
     }
 ]

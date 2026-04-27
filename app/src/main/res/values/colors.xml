@@ -35,4 +35,5 @@
     <color name="transport_icon_border">#40FFCA28</color>
     <color name="divider_subtle">#1AFFFFFF</color>
     <color name="text_tertiary">#66FFFFFF</color>
+    <color name="sharp_glow_yellow">#FFFF00</color>
 </resources>

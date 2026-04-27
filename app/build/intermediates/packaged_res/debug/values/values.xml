@@ -11,6 +11,7 @@
     <color name="red_heavy">#F44336</color>
     <color name="route_blue">#2196F3</color>
     <color name="route_blue_glow">#804FC3F7</color>
+    <color name="sharp_glow_yellow">#FFFF00</color>
     <color name="surface_card">#242424</color>
     <color name="surface_dark">#1A1A1A</color>
     <color name="text_primary">#FFFFFF</color>
@@ -74,5 +75,9 @@
     <style name="Theme.FareGo.Splash" parent="Theme.FareGo">
         <item name="android:windowFullscreen">false</item>
         <item name="android:statusBarColor">@color/bg_dark</item>
+    </style>
+    <style name="YellowHintText" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textColor">@color/yellow_accent</item>
+        <item name="android:textSize">12sp</item>
     </style>
 </resources>
