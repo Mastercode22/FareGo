@@ -7,10 +7,10 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.farego.app.R;
@@ -26,7 +26,7 @@ public final class ItemRouteHistoryBinding implements ViewBinding {
   public final ImageButton btnHistoryFav;
 
   @NonNull
-  public final CardView cardRouteItem;
+  public final LinearLayout cardRouteItem;
 
   @NonNull
   public final ImageView ivHistoryTransport;
@@ -47,7 +47,7 @@ public final class ItemRouteHistoryBinding implements ViewBinding {
   public final TextView tvHistoryTransport;
 
   private ItemRouteHistoryBinding(@NonNull FrameLayout rootView, @NonNull ImageButton btnHistoryFav,
-      @NonNull CardView cardRouteItem, @NonNull ImageView ivHistoryTransport,
+      @NonNull LinearLayout cardRouteItem, @NonNull ImageView ivHistoryTransport,
       @NonNull TextView tvHistoryDate, @NonNull TextView tvHistoryDestination,
       @NonNull TextView tvHistoryDistance, @NonNull TextView tvHistoryFare,
       @NonNull TextView tvHistoryTransport) {
@@ -96,7 +96,7 @@ public final class ItemRouteHistoryBinding implements ViewBinding {
       }
 
       id = R.id.card_route_item;
-      CardView cardRouteItem = ViewBindings.findChildViewById(rootView, id);
+      LinearLayout cardRouteItem = ViewBindings.findChildViewById(rootView, id);
       if (cardRouteItem == null) {
         break missingId;
       }
