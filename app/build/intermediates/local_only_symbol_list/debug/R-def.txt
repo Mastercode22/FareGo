@@ -8,6 +8,7 @@ color divider_subtle
 color error_red
 color glow_yellow
 color green_low
+color input_border_selector
 color nav_item_color
 color orange_moderate
 color red_heavy
@@ -62,6 +63,9 @@ drawable ic_star_outline
 drawable ic_stop
 drawable ic_transport_bus
 drawable tab_indicator_selector
+drawable taxi
+drawable trotro
+drawable uber
 font poppins
 font poppins_bold
 font poppins_regular
@@ -114,8 +118,6 @@ id pb_saving
 id ring_1
 id ring_2
 id ring_3
-id row_confirm_password
-id row_email
 id rv_history
 id tab_auth
 id tab_dots
@@ -137,6 +139,7 @@ id tv_detail_transport
 id tv_distance
 id tv_eta
 id tv_fare
+id tv_fare_label
 id tv_fav_transport
 id tv_history_date
 id tv_history_destination

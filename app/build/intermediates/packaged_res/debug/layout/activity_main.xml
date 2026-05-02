@@ -236,11 +236,20 @@
                     <TextView
                         android:id="@+id/tv_fare"
                         android:text="—"
-                        android:textSize="13sp"
+                        android:textSize="15sp"
                         android:textColor="@color/green_low"
                         android:fontFamily="@font/poppins_bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
+                    <!-- Fare source label: "Standard Fare", "Approx. Fare", "Estimated Range" -->
+                    <TextView
+                        android:id="@+id/tv_fare_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="9sp"
+                        android:textColor="@color/text_secondary"
+                        android:layout_marginTop="2dp"
+                        android:text=""/>
                 </LinearLayout>
             </LinearLayout>
 

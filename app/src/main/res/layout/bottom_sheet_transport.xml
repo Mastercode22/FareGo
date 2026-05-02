@@ -42,12 +42,13 @@
             android:gravity="center_vertical"
             android:padding="14dp">
 
-            <TextView
+            <!-- TroTro Icon -->
+            <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="🚌"
-                android:textSize="24sp"
-                android:gravity="center"/>
+                android:src="@drawable/trotro"
+                android:scaleType="centerInside"
+                android:contentDescription="TroTro icon"/>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -82,7 +83,7 @@
                     android:id="@+id/tv_trotro_fare"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="GH₵ —"
+                    android:text="GH₵ 0.00"
                     android:textSize="14sp"
                     android:textColor="@color/yellow_accent"
                     android:fontFamily="@font/poppins_bold"/>
@@ -116,12 +117,13 @@
             android:gravity="center_vertical"
             android:padding="14dp">
 
-            <TextView
+            <!-- Taxi Icon -->
+            <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="🚕"
-                android:textSize="24sp"
-                android:gravity="center"/>
+                android:src="@drawable/taxi"
+                android:scaleType="centerInside"
+                android:contentDescription="taxi icon"/>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -156,7 +158,7 @@
                     android:id="@+id/tv_taxi_fare"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="GH₵ —"
+                    android:text="GH₵ 0.00"
                     android:textSize="14sp"
                     android:textColor="@color/yellow_accent"
                     android:fontFamily="@font/poppins_bold"/>
@@ -190,12 +192,13 @@
             android:gravity="center_vertical"
             android:padding="14dp">
 
-            <TextView
+            <!-- Uber Icon -->
+            <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="🚗"
-                android:textSize="24sp"
-                android:gravity="center"/>
+                android:src="@drawable/uber"
+                android:scaleType="centerInside"
+                android:contentDescription="Uber icon"/>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -230,7 +233,7 @@
                     android:id="@+id/tv_uber_fare"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="GH₵ —"
+                    android:text="GH₵ 0.00"
                     android:textSize="14sp"
                     android:textColor="@color/yellow_accent"
                     android:fontFamily="@font/poppins_bold"/>
@@ -251,7 +254,7 @@
         android:id="@+id/btn_confirm_transport"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:text="Confirm"
+        android:text="CONFIRM"
         android:textColor="@color/bg_dark"
         android:backgroundTint="@color/yellow_accent"
         android:textSize="16sp"

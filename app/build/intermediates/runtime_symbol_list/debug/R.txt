@@ -1491,6 +1491,7 @@ int color glow_yellow 0x7f05006e
 int color green_low 0x7f05006f
 int color highlighted_text_material_dark 0x7f050070
 int color highlighted_text_material_light 0x7f050071
+int color input_border_selector 0x7f05048f
 int color m3_appbar_overlay_color 0x7f050072
 int color m3_assist_chip_icon_tint_color 0x7f050073
 int color m3_assist_chip_stroke_color 0x7f050074
@@ -3602,9 +3603,12 @@ int drawable quantum_ic_clear_grey600_24 0x7f07011a
 int drawable quantum_ic_cloud_off_vd_theme_24 0x7f07011b
 int drawable quantum_ic_search_grey600_24 0x7f07011c
 int drawable tab_indicator_selector 0x7f07011d
+int drawable taxi 0x7f070123
 int drawable test_level_drawable 0x7f07011e
 int drawable tooltip_frame_dark 0x7f07011f
 int drawable tooltip_frame_light 0x7f070120
+int drawable trotro 0x7f070124
+int drawable uber 0x7f070125
 int font poppins 0x7f080000
 int font poppins_bold 0x7f080001
 int font poppins_regular 0x7f080002
@@ -4056,8 +4060,6 @@ int id ring_1 0x7f0901bc
 int id ring_2 0x7f0901bd
 int id ring_3 0x7f0901be
 int id rounded 0x7f0901bf
-int id row_confirm_password 0x7f0901c0
-int id row_email 0x7f0901c1
 int id row_index_key 0x7f0901c2
 int id rv_history 0x7f0901c3
 int id satellite 0x7f0901c4
@@ -4190,6 +4192,7 @@ int id tv_detail_transport 0x7f090242
 int id tv_distance 0x7f090243
 int id tv_eta 0x7f090244
 int id tv_fare 0x7f090245
+int id tv_fare_label 0x7f09027c
 int id tv_fav_transport 0x7f090246
 int id tv_history_date 0x7f090247
 int id tv_history_destination 0x7f090248

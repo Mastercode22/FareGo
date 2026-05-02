@@ -60,6 +60,9 @@ public final class ActivityMainBinding implements ViewBinding {
   public final TextView tvFare;
 
   @NonNull
+  public final TextView tvFareLabel;
+
+  @NonNull
   public final TextView tvOrigin;
 
   @NonNull
@@ -71,7 +74,7 @@ public final class ActivityMainBinding implements ViewBinding {
       @NonNull FloatingActionButton fabMyLocation,
       @NonNull ExtendedFloatingActionButton fabStartTrip, @NonNull ProgressBar pbRouteLoading,
       @NonNull TextView tvDistance, @NonNull TextView tvEta, @NonNull TextView tvFare,
-      @NonNull TextView tvOrigin, @NonNull TextView tvTrafficBadge) {
+      @NonNull TextView tvFareLabel, @NonNull TextView tvOrigin, @NonNull TextView tvTrafficBadge) {
     this.rootView = rootView;
     this.bottomNav = bottomNav;
     this.btnMic = btnMic;
@@ -84,6 +87,7 @@ public final class ActivityMainBinding implements ViewBinding {
     this.tvDistance = tvDistance;
     this.tvEta = tvEta;
     this.tvFare = tvFare;
+    this.tvFareLabel = tvFareLabel;
     this.tvOrigin = tvOrigin;
     this.tvTrafficBadge = tvTrafficBadge;
   }
@@ -181,6 +185,12 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.tv_fare_label;
+      TextView tvFareLabel = ViewBindings.findChildViewById(rootView, id);
+      if (tvFareLabel == null) {
+        break missingId;
+      }
+
       id = R.id.tv_origin;
       TextView tvOrigin = ViewBindings.findChildViewById(rootView, id);
       if (tvOrigin == null) {
@@ -195,7 +205,7 @@ public final class ActivityMainBinding implements ViewBinding {
 
       return new ActivityMainBinding((CoordinatorLayout) rootView, bottomNav, btnMic, cardSearch,
           cardTripInfo, etDestination, fabMyLocation, fabStartTrip, pbRouteLoading, tvDistance,
-          tvEta, tvFare, tvOrigin, tvTrafficBadge);
+          tvEta, tvFare, tvFareLabel, tvOrigin, tvTrafficBadge);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

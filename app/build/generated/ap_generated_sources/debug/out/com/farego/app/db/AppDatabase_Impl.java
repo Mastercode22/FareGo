@@ -13,6 +13,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import androidx.sqlite.db.SupportSQLiteOpenHelper;
 import com.farego.app.db.dao.FareRateDao;
 import com.farego.app.db.dao.FareRateDao_Impl;
+import com.farego.app.db.dao.RouteFareDao;
+import com.farego.app.db.dao.RouteFareDao_Impl;
 import com.farego.app.db.dao.RouteHistoryDao;
 import com.farego.app.db.dao.RouteHistoryDao_Impl;
 import com.farego.app.db.dao.UserDao;
@@ -43,10 +45,12 @@ public final class AppDatabase_Impl extends AppDatabase {
 
   private volatile UserProfileDao _userProfileDao;
 
+  private volatile RouteFareDao _routeFareDao;
+
   @Override
   @NonNull
   protected SupportSQLiteOpenHelper createOpenHelper(@NonNull final DatabaseConfiguration config) {
-    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(4) {
+    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(5) {
       @Override
       public void createAllTables(@NonNull final SupportSQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS `fare_rates` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `transport_type` TEXT, `base_rate` REAL NOT NULL, `per_km_rate` REAL NOT NULL, `minimum_fare` REAL NOT NULL, `peak_multiplier` REAL NOT NULL, `traffic_multiplier` REAL NOT NULL, `last_updated` INTEGER NOT NULL)");
@@ -56,8 +60,10 @@ public final class AppDatabase_Impl extends AppDatabase {
         db.execSQL("CREATE INDEX IF NOT EXISTS `index_route_history_user_id` ON `route_history` (`user_id`)");
         db.execSQL("CREATE TABLE IF NOT EXISTS `user_profiles` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `user_id` INTEGER NOT NULL, `name` TEXT, `email` TEXT, `phone` TEXT, `avatar_path` TEXT, `home_location` TEXT, `work_location` TEXT, FOREIGN KEY(`user_id`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )");
         db.execSQL("CREATE INDEX IF NOT EXISTS `index_user_profiles_user_id` ON `user_profiles` (`user_id`)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS `route_fares` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `origin` TEXT, `destination` TEXT, `standard_fare` REAL NOT NULL, `distance_km` REAL NOT NULL, `stops_description` TEXT, `last_updated` INTEGER NOT NULL)");
+        db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_route_fares_origin_destination` ON `route_fares` (`origin`, `destination`)");
         db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd6ba5b66179a3531a5dcc4d5fcec27cc')");
+        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '94526b448e4448c7b9c582b68a66405d')");
       }
 
       @Override
@@ -66,6 +72,7 @@ public final class AppDatabase_Impl extends AppDatabase {
         db.execSQL("DROP TABLE IF EXISTS `users`");
         db.execSQL("DROP TABLE IF EXISTS `route_history`");
         db.execSQL("DROP TABLE IF EXISTS `user_profiles`");
+        db.execSQL("DROP TABLE IF EXISTS `route_fares`");
         final List<? extends RoomDatabase.Callback> _callbacks = mCallbacks;
         if (_callbacks != null) {
           for (RoomDatabase.Callback _callback : _callbacks) {
@@ -194,9 +201,27 @@ public final class AppDatabase_Impl extends AppDatabase {
                   + " Expected:\n" + _infoUserProfiles + "\n"
                   + " Found:\n" + _existingUserProfiles);
         }
+        final HashMap<String, TableInfo.Column> _columnsRouteFares = new HashMap<String, TableInfo.Column>(7);
+        _columnsRouteFares.put("id", new TableInfo.Column("id", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsRouteFares.put("origin", new TableInfo.Column("origin", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsRouteFares.put("destination", new TableInfo.Column("destination", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsRouteFares.put("standard_fare", new TableInfo.Column("standard_fare", "REAL", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsRouteFares.put("distance_km", new TableInfo.Column("distance_km", "REAL", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsRouteFares.put("stops_description", new TableInfo.Column("stops_description", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsRouteFares.put("last_updated", new TableInfo.Column("last_updated", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        final HashSet<TableInfo.ForeignKey> _foreignKeysRouteFares = new HashSet<TableInfo.ForeignKey>(0);
+        final HashSet<TableInfo.Index> _indicesRouteFares = new HashSet<TableInfo.Index>(1);
+        _indicesRouteFares.add(new TableInfo.Index("index_route_fares_origin_destination", true, Arrays.asList("origin", "destination"), Arrays.asList("ASC", "ASC")));
+        final TableInfo _infoRouteFares = new TableInfo("route_fares", _columnsRouteFares, _foreignKeysRouteFares, _indicesRouteFares);
+        final TableInfo _existingRouteFares = TableInfo.read(db, "route_fares");
+        if (!_infoRouteFares.equals(_existingRouteFares)) {
+          return new RoomOpenHelper.ValidationResult(false, "route_fares(com.farego.app.db.entity.RouteFare).\n"
+                  + " Expected:\n" + _infoRouteFares + "\n"
+                  + " Found:\n" + _existingRouteFares);
+        }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "d6ba5b66179a3531a5dcc4d5fcec27cc", "7f0f96736fe78a925e168b6c1e0010f4");
+    }, "94526b448e4448c7b9c582b68a66405d", "56708610c390d5ad373cc9e98a09f606");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(config.context).name(config.name).callback(_openCallback).build();
     final SupportSQLiteOpenHelper _helper = config.sqliteOpenHelperFactory.create(_sqliteConfig);
     return _helper;
@@ -207,7 +232,7 @@ public final class AppDatabase_Impl extends AppDatabase {
   protected InvalidationTracker createInvalidationTracker() {
     final HashMap<String, String> _shadowTablesMap = new HashMap<String, String>(0);
     final HashMap<String, Set<String>> _viewTables = new HashMap<String, Set<String>>(0);
-    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "fare_rates","users","route_history","user_profiles");
+    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "fare_rates","users","route_history","user_profiles","route_fares");
   }
 
   @Override
@@ -227,6 +252,7 @@ public final class AppDatabase_Impl extends AppDatabase {
       _db.execSQL("DELETE FROM `users`");
       _db.execSQL("DELETE FROM `route_history`");
       _db.execSQL("DELETE FROM `user_profiles`");
+      _db.execSQL("DELETE FROM `route_fares`");
       super.setTransactionSuccessful();
     } finally {
       super.endTransaction();
@@ -248,6 +274,7 @@ public final class AppDatabase_Impl extends AppDatabase {
     _typeConvertersMap.put(UserDao.class, UserDao_Impl.getRequiredConverters());
     _typeConvertersMap.put(RouteHistoryDao.class, RouteHistoryDao_Impl.getRequiredConverters());
     _typeConvertersMap.put(UserProfileDao.class, UserProfileDao_Impl.getRequiredConverters());
+    _typeConvertersMap.put(RouteFareDao.class, RouteFareDao_Impl.getRequiredConverters());
     return _typeConvertersMap;
   }
 
@@ -318,6 +345,20 @@ public final class AppDatabase_Impl extends AppDatabase {
           _userProfileDao = new UserProfileDao_Impl(this);
         }
         return _userProfileDao;
+      }
+    }
+  }
+
+  @Override
+  public RouteFareDao routeFareDao() {
+    if (_routeFareDao != null) {
+      return _routeFareDao;
+    } else {
+      synchronized(this) {
+        if(_routeFareDao == null) {
+          _routeFareDao = new RouteFareDao_Impl(this);
+        }
+        return _routeFareDao;
       }
     }
   }

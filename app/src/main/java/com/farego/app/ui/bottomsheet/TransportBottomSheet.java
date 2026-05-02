@@ -38,7 +38,7 @@ public class TransportBottomSheet extends BottomSheetDialogFragment {
     private FareCalculator.TransportType selected = FareCalculator.TransportType.TROTRO;
 
     public static TransportBottomSheet newInstance(double distanceKm,
-            FareCalculator.TrafficCondition traffic) {
+                                                   FareCalculator.TrafficCondition traffic) {
         TransportBottomSheet sheet = new TransportBottomSheet();
         Bundle args = new Bundle();
         args.putDouble(ARG_DISTANCE, distanceKm);
@@ -84,52 +84,74 @@ public class TransportBottomSheet extends BottomSheetDialogFragment {
         tvTaxiBadge   = view.findViewById(R.id.tv_taxi_badge);
         tvUberBadge   = view.findViewById(R.id.tv_uber_badge);
 
-        loadFares();
+        // ═══════════════════════════════════════════════════════════════════════
+        //  Initialize all fares to GH₵ 0.00
+        //  Actual calculation happens only after user confirms their selection
+        // ═══════════════════════════════════════════════════════════════════════
+        tvTrotroFare.setText("GH₵ 0.00");
+        tvTaxiFare.setText("GH₵ 0.00");
+        tvUberFare.setText("GH₵ 0.00");
 
         cardTrotro.setOnClickListener(v -> selectTransport(FareCalculator.TransportType.TROTRO));
         cardTaxi.setOnClickListener(v   -> selectTransport(FareCalculator.TransportType.TAXI));
         cardUber.setOnClickListener(v   -> selectTransport(FareCalculator.TransportType.UBER));
 
         view.findViewById(R.id.btn_confirm_transport).setOnClickListener(v -> {
-            if (listener != null) listener.onSelected(selected);
-            dismiss();
+            // Calculate actual fare for the selected transport and confirm
+            calculateAndConfirmFare();
         });
 
         highlightSelected();
     }
 
-    private void loadFares() {
+    // ═════════════════════════════════════════════════════════════════════════
+    //  Calculate fare only on confirmation
+    // ═════════════════════════════════════════════════════════════════════════
+
+    /**
+     * Called when user clicks CONFIRM.
+     * Calculates the actual fare for the selected transport, updates the display,
+     * then notifies the listener and closes the sheet.
+     */
+    private void calculateAndConfirmFare() {
         AppDatabase.DB_EXECUTOR.execute(() -> {
             AppDatabase db = AppDatabase.getInstance(requireContext());
 
-            FareRate trotroRate = db.fareRateDao().getByType("TROTRO");
-            FareRate taxiRate   = db.fareRateDao().getByType("TAXI");
-            FareRate uberRate   = db.fareRateDao().getByType("UBER");
+            // Use .label to match database seeded values: "TroTro", "Taxi", "Uber"
+            FareRate rate = db.fareRateDao().getByType(selected.label);
 
-            FareResult trotro = trotroRate != null
-                    ? FareCalculator.calculate(distanceKm, trotroRate, trafficCondition)
-                    : FareCalculator.estimateOffline(distanceKm, FareCalculator.TransportType.TROTRO, trafficCondition);
-
-            FareResult taxi = taxiRate != null
-                    ? FareCalculator.calculate(distanceKm, taxiRate, trafficCondition)
-                    : FareCalculator.estimateOffline(distanceKm, FareCalculator.TransportType.TAXI, trafficCondition);
-
-            FareResult uber = uberRate != null
-                    ? FareCalculator.calculate(distanceKm, uberRate, trafficCondition)
-                    : FareCalculator.estimateOffline(distanceKm, FareCalculator.TransportType.UBER, trafficCondition);
+            FareResult result;
+            if (rate != null) {
+                // Pass null for RouteFare — the bottom sheet shows generic preview
+                result = FareCalculator.calculate(distanceKm, rate, null, trafficCondition);
+            } else {
+                result = FareCalculator.estimateOffline(distanceKm, selected, trafficCondition);
+            }
 
             if (getActivity() == null) return;
             getActivity().runOnUiThread(() -> {
-                tvTrotroFare.setText(trotro.getFormattedRange());
-                tvTaxiFare.setText(taxi.getFormattedRange());
-                tvUberFare.setText(uber.getFormattedRange());
+                // Update the selected transport's fare display
+                TextView fareTextView = selected == FareCalculator.TransportType.TROTRO ? tvTrotroFare
+                        : selected == FareCalculator.TransportType.TAXI ? tvTaxiFare
+                        : tvUberFare;
+                fareTextView.setText(result.getFormattedRange());
 
-                if (trotro.isPeakHour) tvTrotroBadge.setVisibility(View.VISIBLE);
-                if (taxi.isPeakHour)   tvTaxiBadge.setVisibility(View.VISIBLE);
-                if (uber.isPeakHour)   tvUberBadge.setVisibility(View.VISIBLE);
+                // Show peak hour badge if applicable
+                TextView badgeView = selected == FareCalculator.TransportType.TROTRO ? tvTrotroBadge
+                        : selected == FareCalculator.TransportType.TAXI ? tvTaxiBadge
+                        : tvUberBadge;
+                if (result.isPeakHour) badgeView.setVisibility(View.VISIBLE);
+
+                // Notify listener and close
+                if (listener != null) listener.onSelected(selected);
+                dismiss();
             });
         });
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  Selection highlighting
+    // ═════════════════════════════════════════════════════════════════════════
 
     private void selectTransport(FareCalculator.TransportType type) {
         selected = type;
@@ -146,8 +168,8 @@ public class TransportBottomSheet extends BottomSheetDialogFragment {
         resetCard(cardUber);
 
         CardView active = selected == FareCalculator.TransportType.TROTRO ? cardTrotro
-                        : selected == FareCalculator.TransportType.TAXI   ? cardTaxi
-                        : cardUber;
+                : selected == FareCalculator.TransportType.TAXI   ? cardTaxi
+                : cardUber;
 
         active.setCardBackgroundColor(0xFF1A1A2E);
         active.setCardElevation(12f);

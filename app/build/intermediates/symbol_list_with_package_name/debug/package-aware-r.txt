@@ -1492,6 +1492,7 @@ color glow_yellow
 color green_low
 color highlighted_text_material_dark
 color highlighted_text_material_light
+color input_border_selector
 color m3_appbar_overlay_color
 color m3_assist_chip_icon_tint_color
 color m3_assist_chip_stroke_color
@@ -3603,9 +3604,12 @@ drawable quantum_ic_clear_grey600_24
 drawable quantum_ic_cloud_off_vd_theme_24
 drawable quantum_ic_search_grey600_24
 drawable tab_indicator_selector
+drawable taxi
 drawable test_level_drawable
 drawable tooltip_frame_dark
 drawable tooltip_frame_light
+drawable trotro
+drawable uber
 font poppins
 font poppins_bold
 font poppins_regular
@@ -4057,8 +4061,6 @@ id ring_1
 id ring_2
 id ring_3
 id rounded
-id row_confirm_password
-id row_email
 id row_index_key
 id rv_history
 id satellite
@@ -4191,6 +4193,7 @@ id tv_detail_transport
 id tv_distance
 id tv_eta
 id tv_fare
+id tv_fare_label
 id tv_fav_transport
 id tv_history_date
 id tv_history_destination

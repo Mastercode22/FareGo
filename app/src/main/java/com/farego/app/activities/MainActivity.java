@@ -24,9 +24,10 @@ import com.farego.app.BuildConfig;
 import com.farego.app.R;
 import com.farego.app.db.AppDatabase;
 import com.farego.app.db.entity.FareRate;
+import com.farego.app.db.entity.RouteFare;
 import com.farego.app.model.FareResult;
 import com.farego.app.model.RouteInfo;
-import com.farego.app.navigation.NavigationEngine;               // ← NEW
+import com.farego.app.navigation.NavigationEngine;
 import com.farego.app.network.RetrofitClient;
 import com.farego.app.network.model.DirectionsResponse;
 import com.farego.app.service.TripNavigationService;
@@ -37,10 +38,8 @@ import com.farego.app.utils.PolylineDecoder;
 import com.farego.app.utils.SessionManager;
 import com.farego.app.utils.VoiceSearchManager;
 
-import com.google.android.gms.common.api.ApiException;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
@@ -68,30 +67,13 @@ import com.farego.app.db.dao.RouteHistoryDao;
 
 /**
  * ════════════════════════════════════════════════════════════════════════════
- *  MainActivity.java  — FareGo  (Navigation-upgraded version)
+ *  MainActivity.java  — FareGo
  *
- *  CHANGES FROM v1 (marked with ← NEW or ← CHANGED):
- *
- *  1. NavigationEngine field — holds the engine instance for the lifetime
- *     of the activity.
- *
- *  2. setupLocationClient() — locationCallback now calls
- *     navigationEngine.handleNavigationUpdates() on every GPS fix while
- *     a trip is active.
- *
- *  3. processRoute() — now also extracts steps from the API leg and stores
- *     them in currentRoute.steps.  Also resets the navigation engine when
- *     a fresh route arrives (including reroutes).
- *
- *  4. startTrip() — calls navigationEngine.resetForNewRoute() to begin
- *     guidance from step 0.
- *
- *  5. stopTrip() — calls navigationEngine.stopNavigation() to halt guidance.
- *
- *  6. reroute() — after the new route is fetched, resetForNewRoute() is
- *     called again automatically inside processRoute().
- *
- *  Everything else is unchanged from the original file.
+ *  Integrates:
+ *   - NavigationEngine for turn-by-turn guidance
+ *   - RouteFare fixed GPRTU fare lookup for TroTro routes
+ *   - Dynamic fare model for Taxi / Uber
+ *   - FareResult label display in trip card and summary dialog
  * ════════════════════════════════════════════════════════════════════════════
  */
 public class MainActivity extends AppCompatActivity
@@ -118,7 +100,7 @@ public class MainActivity extends AppCompatActivity
     private TextView    tvOrigin;
     private EditText    etDestination;
     private ImageButton btnMic;
-    private TextView    tvEta, tvDistance, tvFare, tvTrafficBadge;
+    private TextView    tvEta, tvDistance, tvFare, tvTrafficBadge, tvFareLabel;
     private View        cardTripInfo;
     private FloatingActionButton         fabMyLocation;
     private ExtendedFloatingActionButton fabStartTrip;
@@ -141,13 +123,8 @@ public class MainActivity extends AppCompatActivity
     private VoiceSearchManager   voiceManager;
     private VoiceListeningDialog voiceDialog;
 
-    // ── Navigation engine (NEW) ───────────────────────────────────────────────
-    /**
-     * NavigationEngine drives all turn-by-turn logic.
-     * Created in onCreate() after TTS is ready.
-     * It holds a reference to the TTS instance and the reroute listener below.
-     */
-    private NavigationEngine navigationEngine;                   // ← NEW
+    // ── Navigation engine ─────────────────────────────────────────────────────
+    private NavigationEngine navigationEngine;
 
     // ═════════════════════════════════════════════════════════════════════════
     //  onCreate
@@ -169,7 +146,7 @@ public class MainActivity extends AppCompatActivity
 
         bindViews();
         initVoice();
-        initNavigationEngine();   // ← NEW — must be after tts is created
+        initNavigationEngine();
         setupMap();
         setupLocationClient();
         setupClickListeners();
@@ -187,36 +164,23 @@ public class MainActivity extends AppCompatActivity
     }
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  Navigation engine initialisation (NEW)
+    //  Navigation engine initialisation
     // ═════════════════════════════════════════════════════════════════════════
-
-    /**
-     * Creates the NavigationEngine and wires up the reroute callback.
-     *
-     * The RerouteListener.onOffRoute() is invoked by the engine whenever it
-     * determines the user has wandered more than 60 m from the current step.
-     * We respond by calling our existing reroute() method, which fetches a
-     * fresh Directions API response from the user's current position.
-     */
-    private void initNavigationEngine() {                        // ← NEW
+    private void initNavigationEngine() {
         navigationEngine = new NavigationEngine(
                 this,
                 tts,
-                () -> {
-                    // Called on the background thread that runs GPS callbacks.
-                    // Post to main thread before touching UI state.
-                    runOnUiThread(() -> {
-                        if (tripActive && !isRerouting) {
-                            speak("Recalculating route.");
-                            reroute();
-                        }
-                    });
-                }
+                () -> runOnUiThread(() -> {
+                    if (tripActive && !isRerouting) {
+                        speak("Recalculating route.");
+                        reroute();
+                    }
+                })
         );
     }
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  View binding (unchanged)
+    //  View binding
     // ═════════════════════════════════════════════════════════════════════════
     private void bindViews() {
         tvOrigin       = findViewById(R.id.tv_origin);
@@ -225,6 +189,7 @@ public class MainActivity extends AppCompatActivity
         tvEta          = findViewById(R.id.tv_eta);
         tvDistance     = findViewById(R.id.tv_distance);
         tvFare         = findViewById(R.id.tv_fare);
+        tvFareLabel    = findViewById(R.id.tv_fare_label); // null-safe; checked before use
         tvTrafficBadge = findViewById(R.id.tv_traffic_badge);
         cardTripInfo   = findViewById(R.id.card_trip_info);
         fabMyLocation  = findViewById(R.id.fab_my_location);
@@ -234,7 +199,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  Voice initialisation (unchanged)
+    //  Voice initialisation
     // ═════════════════════════════════════════════════════════════════════════
     private void initVoice() {
         voiceManager = new VoiceSearchManager(this, voiceCallback);
@@ -242,7 +207,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  Click listeners (unchanged)
+    //  Click listeners
     // ═════════════════════════════════════════════════════════════════════════
     private void setupClickListeners() {
         etDestination.setOnClickListener(v -> launchDestinationAutocomplete());
@@ -275,7 +240,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  Voice — startVoiceInput (unchanged)
+    //  Voice
     // ═════════════════════════════════════════════════════════════════════════
     private void startVoiceInput() {
         if (voiceManager == null) {
@@ -292,9 +257,6 @@ public class MainActivity extends AppCompatActivity
         anim.start();
     }
 
-    // ═════════════════════════════════════════════════════════════════════════
-    //  Voice — callback (unchanged)
-    // ═════════════════════════════════════════════════════════════════════════
     private final VoiceSearchManager.VoiceSearchCallback voiceCallback =
             new VoiceSearchManager.VoiceSearchCallback() {
 
@@ -360,7 +322,7 @@ public class MainActivity extends AppCompatActivity
             };
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  Bottom nav (unchanged)
+    //  Bottom nav
     // ═════════════════════════════════════════════════════════════════════════
     private void setupBottomNav() {
         bottomNav.setOnItemSelectedListener(item -> {
@@ -395,7 +357,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  Map (unchanged)
+    //  Map
     // ═════════════════════════════════════════════════════════════════════════
     private void setupMap() {
         SupportMapFragment mapFragment = (SupportMapFragment)
@@ -427,7 +389,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  Location  (CHANGED — navigation engine call added)
+    //  Location
     // ═════════════════════════════════════════════════════════════════════════
     private void setupLocationClient() {
         fusedClient = LocationServices.getFusedLocationProviderClient(this);
@@ -436,28 +398,20 @@ public class MainActivity extends AppCompatActivity
             public void onLocationResult(@NonNull LocationResult result) {
                 if (result.getLastLocation() == null) return;
 
-                // Update current position
                 currentLatLng = new LatLng(
                         result.getLastLocation().getLatitude(),
                         result.getLastLocation().getLongitude());
 
-                // Move the user marker on the map
                 updateUserMarker(currentLatLng);
 
-                // ── Navigation engine tick (NEW) ──────────────────────────
-                // Feed every GPS update to the engine while a trip is active.
-                // The engine handles distance measuring, voice, and off-route.
-                // We only call it if the route has step data (live API response);
-                // offline fallback routes won't have steps so guidance is skipped.
+                // Feed GPS updates to the navigation engine while a trip is active
                 if (tripActive && currentRoute != null
                         && navigationEngine != null
-                        && currentRoute.hasSteps()) {                // ← NEW
+                        && currentRoute.hasSteps()) {
                     navigationEngine.handleNavigationUpdates(currentLatLng, currentRoute);
                 }
 
-                // ── Legacy polyline off-route check ──────────────────────
-                // Keep the original reroute guard as a safety net for cases
-                // where the engine's step-level check doesn't fire first.
+                // Polyline off-route safety net
                 if (tripActive && currentRoute != null && !isRerouting
                         && !isOnRoute(currentLatLng)) {
                     reroute();
@@ -477,7 +431,6 @@ public class MainActivity extends AppCompatActivity
         return false;
     }
 
-    // ── Permissions (unchanged) ───────────────────────────────────────────────
     private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -519,7 +472,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  Destination Autocomplete (unchanged)
+    //  Destination Autocomplete
     // ═════════════════════════════════════════════════════════════════════════
     private void launchDestinationAutocomplete() {
         if (!Places.isInitialized()) {
@@ -567,7 +520,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  Destination selection (unchanged)
+    //  Destination selection
     // ═════════════════════════════════════════════════════════════════════════
     public void onDestinationSelected(String name, LatLng latLng) {
         etDestination.setText(name);
@@ -583,7 +536,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  Reverse geocode (unchanged)
+    //  Reverse geocode
     // ═════════════════════════════════════════════════════════════════════════
     private void reverseGeocodeAndConfirm(LatLng latLng) {
         if (destMarker != null) destMarker.remove();
@@ -648,7 +601,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  Route fetching (unchanged)
+    //  Route fetching
     // ═════════════════════════════════════════════════════════════════════════
     private void fetchRoute(RouteInfo route, boolean animateCamera) {
         pbRouteLoading.setVisibility(View.VISIBLE);
@@ -682,7 +635,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  processRoute  (CHANGED — step extraction added)
+    //  processRoute
     // ═════════════════════════════════════════════════════════════════════════
     private void processRoute(DirectionsResponse resp, boolean animateCamera) {
         DirectionsResponse.Route r   = resp.routes.get(0);
@@ -698,28 +651,21 @@ public class MainActivity extends AppCompatActivity
         else if (ratio < 1.40) trafficCondition = FareCalculator.TrafficCondition.MODERATE;
         else                   trafficCondition = FareCalculator.TrafficCondition.HEAVY;
 
-        currentRoute.distanceKm      = distKm;
-        currentRoute.durationMinutes = withTraffic;
-        currentRoute.distanceText    = leg.distance.text;
-        currentRoute.durationText    = leg.duration.text;
+        currentRoute.distanceKm       = distKm;
+        currentRoute.durationMinutes  = withTraffic;
+        currentRoute.distanceText     = leg.distance.text;
+        currentRoute.durationText     = leg.duration.text;
         currentRoute.trafficCondition = trafficCondition;
-        currentRoute.polylinePoints  = PolylineDecoder.decode(r.overviewPolyline.points);
-
-        // ── Extract turn-by-turn steps from the leg (NEW) ─────────────────────
-        // Store the raw Step objects in RouteInfo so NavigationEngine can
-        // read htmlInstructions, endLocation, maneuver, and distance.
-        currentRoute.steps = leg.steps;                           // ← NEW
+        currentRoute.polylinePoints   = PolylineDecoder.decode(r.overviewPolyline.points);
+        currentRoute.steps            = leg.steps;
 
         drawRoute(currentRoute.polylinePoints, animateCamera);
         updateTripCard();
         updateFares();
 
-        // ── If a trip is already active (reroute scenario), reset the engine ──
-        // This ensures the step index restarts from 0 for the new route and
-        // any previously set announcement flags are cleared.
-        if (tripActive && navigationEngine != null) {             // ← NEW
+        // If a trip is active (reroute scenario), reset the engine for the new route
+        if (tripActive && navigationEngine != null) {
             navigationEngine.resetForNewRoute();
-            // Announce that rerouting is complete
             if (isRerouting) speak("Route updated.");
         }
     }
@@ -728,19 +674,18 @@ public class MainActivity extends AppCompatActivity
         double distKm = haversine(
                 route.originLatLng.latitude, route.originLatLng.longitude,
                 route.destinationLatLng.latitude, route.destinationLatLng.longitude);
-        route.distanceKm      = distKm;
-        route.durationMinutes = (int)(distKm / 30.0 * 60);
-        route.distanceText    = String.format("%.1f km", distKm);
-        route.durationText    = route.durationMinutes + " min";
+        route.distanceKm       = distKm;
+        route.durationMinutes  = (int)(distKm / 30.0 * 60);
+        route.distanceText     = String.format("%.1f km", distKm);
+        route.durationText     = route.durationMinutes + " min";
         route.trafficCondition = trafficCondition;
-        // Note: steps will be null in offline mode — navigation engine will skip
         updateTripCard();
         updateFares();
         Toast.makeText(this, "Offline fare estimate (no network)", Toast.LENGTH_SHORT).show();
     }
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  Map drawing (unchanged)
+    //  Map drawing
     // ═════════════════════════════════════════════════════════════════════════
     private void drawRoute(List<LatLng> points, boolean animateCamera) {
         if (googleMap == null || points == null || points.isEmpty()) return;
@@ -796,7 +741,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  UI updates (unchanged)
+    //  UI updates
     // ═════════════════════════════════════════════════════════════════════════
     private void updateTripCard() {
         if (currentRoute == null) return;
@@ -812,17 +757,70 @@ public class MainActivity extends AppCompatActivity
     private void updateFares() {
         if (currentRoute == null) return;
         AppDatabase.DB_EXECUTOR.execute(() -> {
-            FareRate rate = db.fareRateDao().getByType(selectedTransport.name());
-            FareResult result = rate != null
-                    ? FareCalculator.calculate(currentRoute.distanceKm, rate, trafficCondition)
-                    : FareCalculator.estimateOffline(currentRoute.distanceKm,
-                    selectedTransport, trafficCondition);
-            runOnUiThread(() -> tvFare.setText(result.getFormattedRange()));
+            FareResult result = resolveFare(
+                    currentRoute.distanceKm,
+                    currentRoute.originLabel,
+                    currentRoute.destinationLabel,
+                    selectedTransport,
+                    trafficCondition);
+            runOnUiThread(() -> {
+                tvFare.setText(result.getFormattedFare());
+                if (tvFareLabel != null) tvFareLabel.setText(result.getFareLabel());
+            });
         });
     }
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  Transport sheet (unchanged)
+    //  Fare resolution — single source of truth
+    //
+    //  Bug fix: selectedTransport.name() returns "TROTRO" / "TAXI" / "UBER"
+    //  (all caps) but the DB seeds rows as "TroTro" / "Taxi" / "Uber".
+    //  SQLite's = operator is case-sensitive for non-ASCII, so the lookup was
+    //  always returning null and falling through to estimateOffline().
+    //  We now use TransportType.label ("TroTro", "Taxi", "Uber") which matches
+    //  exactly what AppDatabase.seedCallback inserts.
+    // ═════════════════════════════════════════════════════════════════════════
+    private FareResult resolveFare(double distKm,
+                                   String origin,
+                                   String destination,
+                                   FareCalculator.TransportType transport,
+                                   FareCalculator.TrafficCondition traffic) {
+
+        // Use transport.label ("TroTro" / "Taxi" / "Uber") — matches DB seed values exactly.
+        FareRate rate = db.fareRateDao().getByType(transport.label);
+
+        if (transport == FareCalculator.TransportType.TROTRO) {
+            // When origin is a live GPS position ("My Location") it will never
+            // match a named terminus in the route_fares table, so fall back
+            // to a destination-only lookup which finds the fare for that stop
+            // regardless of where the user boarded.
+            RouteFare routeFare = isNamedTerminus(origin)
+                    ? db.routeFareDao().findByOriginAndDestination(origin, destination)
+                    : db.routeFareDao().findByDestination(destination);
+            return (rate != null)
+                    ? FareCalculator.calculate(distKm, rate, routeFare, traffic)
+                    : FareCalculator.estimateOffline(distKm, transport, traffic);
+        } else {
+            // Taxi / Uber: dynamic model, no fixed-route lookup
+            return (rate != null)
+                    ? FareCalculator.calculate(distKm, rate, null, traffic)
+                    : FareCalculator.estimateOffline(distKm, transport, traffic);
+        }
+    }
+
+    /**
+     * Returns true when the origin is a real named terminus rather than a GPS label.
+     * "My Location" and coordinate strings (e.g. "5.60123, -0.18456") are NOT termini.
+     */
+    private static boolean isNamedTerminus(String origin) {
+        if (origin == null) return false;
+        if (origin.equalsIgnoreCase("My Location")) return false;
+        if (origin.matches("-?\\d+\\.\\d+,\\s*-?\\d+\\.\\d+")) return false;
+        return true;
+    }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  Transport sheet
     // ═════════════════════════════════════════════════════════════════════════
     private void showTransportSheet() {
         if (currentRoute == null) return;
@@ -836,7 +834,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  Route reuse (unchanged)
+    //  Route reuse
     // ═════════════════════════════════════════════════════════════════════════
     public void loadRoute(RouteHistory history) {
         LatLng dest = new LatLng(history.destinationLat, history.destinationLng);
@@ -851,7 +849,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  Trip lifecycle  (CHANGED — engine hooks added)
+    //  Trip lifecycle
     // ═════════════════════════════════════════════════════════════════════════
     private void startTrip() {
         tripActive      = true;
@@ -859,23 +857,16 @@ public class MainActivity extends AppCompatActivity
         fabStartTrip.setText("End Trip");
         fabStartTrip.setIconResource(R.drawable.ic_stop);
 
-        // ── Announce departure via TTS ────────────────────────────────────────
         speak("Navigation started. "
                 + etDestination.getText()
                 + " in " + currentRoute.durationMinutes + " minutes.");
 
-        // ── Begin turn-by-turn guidance from step 0 (NEW) ────────────────────
-        // resetForNewRoute() clears all per-step flags and enables the engine.
-        // It must be called AFTER tripActive = true so processRoute() doesn't
-        // re-reset if a reroute fires immediately on the first GPS tick.
-        if (navigationEngine != null) {                           // ← NEW
+        if (navigationEngine != null) {
             navigationEngine.resetForNewRoute();
         }
 
-        // ── Announce first step immediately (NEW) ─────────────────────────────
-        // The user should hear "Head north on X" right after starting, rather
-        // than waiting until they reach the 200 m threshold of the first turn.
-        if (currentRoute.hasSteps()) {                            // ← NEW
+        // Announce the first step immediately
+        if (currentRoute.hasSteps()) {
             String firstInstruction = NavigationEngine.stripHtml(
                     currentRoute.steps.get(0).htmlInstructions);
             speak(firstInstruction);
@@ -894,40 +885,46 @@ public class MainActivity extends AppCompatActivity
         saveRouteToHistory();
     }
 
+    /**
+     * Ends the active trip, resolves the final fare, and shows the summary dialog.
+     */
     private void stopTrip() {
-        String  destination  = currentRoute != null ? currentRoute.destinationLabel : "Unknown";
-        double  distanceKm   = currentRoute != null ? currentRoute.distanceKm : 0;
-        int     etaMins      = currentRoute != null ? currentRoute.durationMinutes : 0;
-        String  trafficLabel = trafficCondition.label;
-        String  transport    = selectedTransport.name();
-        long    elapsedMs    = System.currentTimeMillis() - tripStartTimeMs;
-        int     elapsedMins  = (int)(elapsedMs / 60000);
+        // Capture route state before resetting flags
+        String destination  = currentRoute != null ? currentRoute.destinationLabel : "Unknown";
+        String origin       = currentRoute != null ? currentRoute.originLabel : "My Location";
+        double distanceKm   = currentRoute != null ? currentRoute.distanceKm : 0;
+        int    etaMins      = currentRoute != null ? currentRoute.durationMinutes : 0;
+        String trafficLabel = trafficCondition.label;
+        String transport    = selectedTransport.name();
+        long   elapsedMs    = System.currentTimeMillis() - tripStartTimeMs;
+        int    elapsedMins  = (int)(elapsedMs / 60000);
 
+        // Resolve fare on background thread, then show summary on UI thread
         AppDatabase.DB_EXECUTOR.execute(() -> {
-            FareRate rate = db.fareRateDao().getByType(selectedTransport.name());
-            FareResult result = rate != null
-                    ? FareCalculator.calculate(distanceKm, rate, trafficCondition)
-                    : FareCalculator.estimateOffline(distanceKm, selectedTransport, trafficCondition);
-            String fareRange = result.getFormattedRange();
+            FareResult result = resolveFare(
+                    distanceKm, origin, destination, selectedTransport, trafficCondition);
             runOnUiThread(() -> showTripSummaryDialog(
                     destination, distanceKm, etaMins, elapsedMins,
-                    fareRange, trafficLabel, transport));
+                    result.getFormattedFare(), result.getFareLabel(),
+                    trafficLabel, transport));
         });
 
         tripActive  = false;
         isRerouting = false;
-
-        // ── Stop navigation engine (NEW) ──────────────────────────────────────
-        if (navigationEngine != null) navigationEngine.stopNavigation(); // ← NEW
-
+        if (navigationEngine != null) navigationEngine.stopNavigation();
         stopService(new Intent(this, TripNavigationService.class));
         speak("Trip ended.");
         fabStartTrip.setText("Start Trip");
         fabStartTrip.setIconResource(R.drawable.ic_navigation);
     }
 
+    /**
+     * Displays the end-of-trip summary.
+     * fareLabel distinguishes "Standard Fare" (fixed GPRTU) from
+     * "Estimated Fare Range" (Taxi/Uber) or "Approx. Fare" (TroTro fallback).
+     */
     private void showTripSummaryDialog(String destination, double distanceKm, int etaMins,
-                                       int elapsedMins, String fareRange,
+                                       int elapsedMins, String fareDisplay, String fareLabel,
                                        String trafficLabel, String transport) {
         String elapsedText;
         if (elapsedMins >= 60)    elapsedText = (elapsedMins / 60) + "h " + (elapsedMins % 60) + "m";
@@ -937,13 +934,13 @@ public class MainActivity extends AppCompatActivity
         String transportLabel = transport.charAt(0) + transport.substring(1).toLowerCase();
 
         String message =
-                "\uD83C\uDFC1  Destination\n"       + destination + "\n\n" +
-                        "\uD83D\uDCCF  Distance\n"           + String.format("%.1f km", distanceKm) + "\n\n" +
-                        "\u23F1  Time on trip\n"             + elapsedText + "\n\n" +
-                        "\uD83D\uDDFA  Estimated duration\n" + etaMins + " min\n\n" +
-                        "\uD83D\uDEA6  Traffic condition\n"  + trafficLabel + "\n\n" +
-                        "\uD83D\uDE8C  Transport type\n"     + transportLabel + "\n\n" +
-                        "\uD83D\uDCB0  Fare estimate\n"      + fareRange;
+                "\uD83C\uDFC1  Destination\n"        + destination  + "\n\n" +
+                        "\uD83D\uDCCF  Distance\n"            + String.format("%.1f km", distanceKm) + "\n\n" +
+                        "\u23F1  Time on trip\n"              + elapsedText  + "\n\n" +
+                        "\uD83D\uDDFA  Estimated duration\n"  + etaMins + " min\n\n" +
+                        "\uD83D\uDEA6  Traffic condition\n"   + trafficLabel + "\n\n" +
+                        "\uD83D\uDE8C  Transport type\n"      + transportLabel + "\n\n" +
+                        "\uD83D\uDCB0  " + fareLabel + "\n"   + fareDisplay;
 
         new AlertDialog.Builder(this, R.style.FareGoDialogTheme)
                 .setTitle("Trip Summary")
@@ -977,31 +974,31 @@ public class MainActivity extends AppCompatActivity
         isRerouting = true;
         currentRoute.originLatLng = currentLatLng;
         fetchRoute(currentRoute, false);
-        // processRoute() will call navigationEngine.resetForNewRoute() after
-        // the new steps arrive, so we don't need to reset here.
     }
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  Database (unchanged)
+    //  Database — route history
     // ═════════════════════════════════════════════════════════════════════════
     private void saveRouteToHistory() {
         if (currentRoute == null) return;
+
+        double distKm      = currentRoute.distanceKm;
+        String origin      = currentRoute.originLabel;
+        String destination = currentRoute.destinationLabel;
+
         AppDatabase.DB_EXECUTOR.execute(() -> {
-            FareRate rate = db.fareRateDao().getByType(selectedTransport.name());
-            FareResult result = rate != null
-                    ? FareCalculator.calculate(currentRoute.distanceKm, rate, trafficCondition)
-                    : FareCalculator.estimateOffline(
-                    currentRoute.distanceKm, selectedTransport, trafficCondition);
+            FareResult result = resolveFare(
+                    distKm, origin, destination, selectedTransport, trafficCondition);
 
             RouteHistory h     = new RouteHistory();
             h.userId           = session.getUserId();
-            h.originLabel      = "My Location";
+            h.originLabel      = origin;
             h.originLat        = currentRoute.originLatLng.latitude;
             h.originLng        = currentRoute.originLatLng.longitude;
-            h.destinationLabel = currentRoute.destinationLabel;
+            h.destinationLabel = destination;
             h.destinationLat   = currentRoute.destinationLatLng.latitude;
             h.destinationLng   = currentRoute.destinationLatLng.longitude;
-            h.distanceKm       = currentRoute.distanceKm;
+            h.distanceKm       = distKm;
             h.durationMinutes  = currentRoute.durationMinutes;
             h.estimatedFare    = result.estimatedFare;
             h.transportType    = selectedTransport.name();
@@ -1012,7 +1009,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  TTS (unchanged)
+    //  TTS
     // ═════════════════════════════════════════════════════════════════════════
     @Override
     public void onInit(int status) {
@@ -1024,7 +1021,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  Haversine distance (unchanged)
+    //  Haversine distance
     // ═════════════════════════════════════════════════════════════════════════
     private double haversine(double lat1, double lng1, double lat2, double lng2) {
         double R    = 6371;
@@ -1037,15 +1034,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  Lifecycle cleanup  (CHANGED — engine stop added)
+    //  Lifecycle cleanup
     // ═════════════════════════════════════════════════════════════════════════
     @Override
     protected void onDestroy() {
-        if (voiceManager   != null) voiceManager.destroy();
-        if (voiceDialog    != null && voiceDialog.isShowing()) voiceDialog.dismiss();
-        if (tts            != null) { tts.stop(); tts.shutdown(); }
-        if (navigationEngine != null) navigationEngine.stopNavigation(); // ← NEW
-        if (fusedClient    != null && locationCallback != null)
+        if (voiceManager     != null) voiceManager.destroy();
+        if (voiceDialog      != null && voiceDialog.isShowing()) voiceDialog.dismiss();
+        if (tts              != null) { tts.stop(); tts.shutdown(); }
+        if (navigationEngine != null) navigationEngine.stopNavigation();
+        if (fusedClient      != null && locationCallback != null)
             fusedClient.removeLocationUpdates(locationCallback);
         super.onDestroy();
     }

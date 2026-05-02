@@ -43,12 +43,6 @@ public final class ActivityAuthBinding implements ViewBinding {
   public final ImageView ivAuthLogo;
 
   @NonNull
-  public final View rowConfirmPassword;
-
-  @NonNull
-  public final View rowEmail;
-
-  @NonNull
   public final TabLayout tabAuth;
 
   @NonNull
@@ -69,10 +63,10 @@ public final class ActivityAuthBinding implements ViewBinding {
   private ActivityAuthBinding(@NonNull ScrollView rootView, @NonNull Button btnAuthSubmit,
       @NonNull TextInputEditText etConfirmPassword, @NonNull TextInputEditText etEmail,
       @NonNull TextInputEditText etPassword, @NonNull TextInputEditText etUsername,
-      @NonNull ImageView ivAuthLogo, @NonNull View rowConfirmPassword, @NonNull View rowEmail,
-      @NonNull TabLayout tabAuth, @NonNull TextInputLayout tilConfirmPassword,
-      @NonNull TextInputLayout tilEmail, @NonNull TextInputLayout tilPassword,
-      @NonNull TextInputLayout tilUsername, @NonNull TextView tvAuthTitle) {
+      @NonNull ImageView ivAuthLogo, @NonNull TabLayout tabAuth,
+      @NonNull TextInputLayout tilConfirmPassword, @NonNull TextInputLayout tilEmail,
+      @NonNull TextInputLayout tilPassword, @NonNull TextInputLayout tilUsername,
+      @NonNull TextView tvAuthTitle) {
     this.rootView = rootView;
     this.btnAuthSubmit = btnAuthSubmit;
     this.etConfirmPassword = etConfirmPassword;
@@ -80,8 +74,6 @@ public final class ActivityAuthBinding implements ViewBinding {
     this.etPassword = etPassword;
     this.etUsername = etUsername;
     this.ivAuthLogo = ivAuthLogo;
-    this.rowConfirmPassword = rowConfirmPassword;
-    this.rowEmail = rowEmail;
     this.tabAuth = tabAuth;
     this.tilConfirmPassword = tilConfirmPassword;
     this.tilEmail = tilEmail;
@@ -153,18 +145,6 @@ public final class ActivityAuthBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.row_confirm_password;
-      View rowConfirmPassword = ViewBindings.findChildViewById(rootView, id);
-      if (rowConfirmPassword == null) {
-        break missingId;
-      }
-
-      id = R.id.row_email;
-      View rowEmail = ViewBindings.findChildViewById(rootView, id);
-      if (rowEmail == null) {
-        break missingId;
-      }
-
       id = R.id.tab_auth;
       TabLayout tabAuth = ViewBindings.findChildViewById(rootView, id);
       if (tabAuth == null) {
@@ -202,8 +182,8 @@ public final class ActivityAuthBinding implements ViewBinding {
       }
 
       return new ActivityAuthBinding((ScrollView) rootView, btnAuthSubmit, etConfirmPassword,
-          etEmail, etPassword, etUsername, ivAuthLogo, rowConfirmPassword, rowEmail, tabAuth,
-          tilConfirmPassword, tilEmail, tilPassword, tilUsername, tvAuthTitle);
+          etEmail, etPassword, etUsername, ivAuthLogo, tabAuth, tilConfirmPassword, tilEmail,
+          tilPassword, tilUsername, tvAuthTitle);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));
